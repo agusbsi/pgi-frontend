@@ -56,6 +56,7 @@ const PelangganPage = () => {
     { title: "Kontak", dataIndex: "kontak", key: "kontak" },
     { title: "Alamat", dataIndex: "alamat", key: "alamat" },
     { title: "Tipe", dataIndex: "email", key: "email" },
+    { title: "Catatan", dataIndex: "email", key: "email" },
     {
       title: "Aksi",
       key: "aksi",

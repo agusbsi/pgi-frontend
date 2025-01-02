@@ -180,26 +180,14 @@ const BarangPage = () => {
       ),
     },
     { title: "Merk", dataIndex: "merk", key: "merk" },
+    
+   
+    { title: "Stok", dataIndex: "stok", key: "stok" },
     {
       title: "Satuan",
       dataIndex: "satuan_pertama",
       key: "satuan_pertama",
     },
-    {
-      title: "Harga",
-      key: "harga",
-      render: (text, record) => (
-        <>
-          <p>
-            Beli : <span style={{ color: "gray" }}>{record.hargaBeli}</span>
-          </p>
-          <p>
-            Jual : <span style={{ color: "gray" }}>{record.hargaJual}</span>
-          </p>
-        </>
-      ),
-    },
-    { title: "Stok", dataIndex: "stok", key: "stok" },
     {
       title: "Aksi",
       key: "aksi",

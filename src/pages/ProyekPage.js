@@ -201,9 +201,6 @@ const ProyekPage = () => {
               title: <span className="text-sm">Pengumpulan Modal</span>,
             },
             {
-              title: <span className="text-sm">Proyek dimulai</span>,
-            },
-            {
               title: <span className="text-sm">Pembelian Barang (Import)</span>,
             },
             {
