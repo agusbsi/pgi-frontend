@@ -243,7 +243,22 @@ const PelangganPage = () => {
         />
       </Row>
       <div className="container mx-auto p-0">
-        <Table columns={columns} dataSource={data} />
+        <Table
+          columns={columns}
+          dataSource={data}
+          components={{
+            header: {
+              cell: (props) => (
+                <th
+                  {...props}
+                  style={{ backgroundColor: "#1890ff", color: "white" }}
+                >
+                  {props.children}
+                </th>
+              ),
+            },
+          }}
+        />
       </div>
     </div>
   );

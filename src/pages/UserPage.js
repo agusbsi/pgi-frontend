@@ -9,6 +9,9 @@ import {
   Button,
   Dropdown,
   Menu,
+  Space,
+  Badge,
+  Avatar,
 } from "antd";
 import {
   PlusCircleOutlined,
@@ -28,6 +31,7 @@ const UserPage = () => {
       nomor: "1",
       name: "User A",
       telp: "083892010575",
+      role: "Direksi",
       username: "usera",
       password: "******",
       foto: "https://via.placeholder.com/50",
@@ -37,6 +41,7 @@ const UserPage = () => {
       nomor: "2",
       name: "User B",
       telp: "081234567890",
+      role: "Gudang",
       username: "userb",
       password: "******",
       foto: "https://via.placeholder.com/50",
@@ -46,6 +51,7 @@ const UserPage = () => {
       nomor: "3",
       name: "User C",
       telp: "085678910112",
+      role: "Admin Online",
       username: "userc",
       password: "******",
       foto: "https://via.placeholder.com/50",
@@ -55,6 +61,7 @@ const UserPage = () => {
       nomor: "4",
       name: "User D",
       telp: "081356789012",
+      role: "Packing",
       username: "userd",
       password: "******",
       foto: "https://via.placeholder.com/50",
@@ -72,17 +79,23 @@ const UserPage = () => {
 
   const columns = [
     { title: "No", dataIndex: "nomor", key: "nomor" },
-    { title: "Nama", dataIndex: "name", key: "name" },
-    { title: "Telp", dataIndex: "telp", key: "telp" },
-    { title: "Username", dataIndex: "username", key: "username" },
     {
-      title: "Foto",
-      dataIndex: "foto",
-      key: "foto",
-      render: (text) => (
-        <img src={text} alt="Foto" style={{ width: 50, borderRadius: "50%" }} />
+      title: "Nama",
+      key: "name",
+      render: (text, record) => (
+        <Space>
+          <Avatar size="large" src={record.foto} />
+          <div>
+            <strong>{record.name}</strong>
+            <br />
+            <Badge status="success" text="Online" />
+          </div>
+        </Space>
       ),
     },
+    { title: "Telp", dataIndex: "telp", key: "telp" },
+    { title: "Hak Akses", dataIndex: "role", key: "role" },
+    { title: "Username", dataIndex: "username", key: "username" },
     {
       title: "Menu",
       key: "menu",
@@ -152,7 +165,22 @@ const UserPage = () => {
       <div className="container mx-auto p-0">
         {/* Tampilkan Tabel di Desktop */}
         <div className="hidden lg:block">
-          <Table columns={columns} dataSource={data} />
+          <Table
+            columns={columns}
+            dataSource={data}
+            components={{
+              header: {
+                cell: (props) => (
+                  <th
+                    {...props}
+                    style={{ backgroundColor: "#1890ff", color: "white" }}
+                  >
+                    {props.children}
+                  </th>
+                ),
+              },
+            }}
+          />
         </div>
 
         {/* Tampilkan Kartu di Mobile */}

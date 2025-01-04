@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import {
   Table,
   Typography,
@@ -9,10 +10,7 @@ import {
   Button,
   Dropdown,
   Menu,
-  Divider,
-  Steps,
   Badge,
-  Popover,
   Avatar,
 } from "antd";
 import {
@@ -25,17 +23,6 @@ import {
 
 const { Title } = Typography;
 const { Search } = Input;
-const customDot = (dot, { status, index }) => (
-  <Popover
-    content={
-      <span>
-        step {index} status: {status}
-      </span>
-    }
-  >
-    {dot}
-  </Popover>
-);
 const ProyekPage = () => {
   const [data, setData] = useState([
     {
@@ -43,8 +30,29 @@ const ProyekPage = () => {
       no: "1",
       nomor: "PYK-2024/XI/001",
       desc: "Proyek Import dan penjualan Modem Batch 1",
-      dana: "Rp. 500.000.000",
+      danaTarget: 500000000,
+      danaTersedia: 500000000,
       Periode: "01 Juni 2024 s/d 01 Desember 2024",
+      investor: [
+        "Kang Sulton",
+        "Kang Agus",
+        "Kang Rois",
+        "Kang Salam",
+        "Kang Takul",
+        "Kang Dwi",
+      ],
+      status: "Baru Mulai",
+    },
+    {
+      key: "2",
+      no: "2",
+      nomor: "PYK-2024/XI/002",
+      desc: "Proyek Import dan penjualan Modem Batch 2",
+      danaTarget: 400000000,
+      danaTersedia: 250000000,
+      Periode: "On Progress",
+      investor: ["Kang Sulton", "Kang Agus", "Kang Rois"],
+      status: "On Progress",
     },
   ]);
   const columns = [
@@ -54,27 +62,74 @@ const ProyekPage = () => {
       key: "Proyek",
       render: (text, record) => (
         <div>
-          <div>{record.nomor}</div>
-          <div style={{ color: "gray" }}>{record.desc}</div>
+          <div className="font-black">{record.nomor}</div>
+          <p>{record.desc}</p>
+          <div style={{ color: "gray" }}>{record.Periode}</div>
         </div>
       ),
     },
     {
       title: "Pendanaan",
       key: "Pendanaan",
+      render: (text, record) => {
+        const percentage = (
+          (record.danaTersedia / record.danaTarget) *
+          100
+        ).toFixed(2);
+        return (
+          <>
+            <p className="font-bold">
+              Rp. {record.danaTarget.toLocaleString()}
+            </p>
+            <div style={{ color: "gray", fontSize: "12px" }}>
+              Terkumpul: Rp. {record.danaTersedia.toLocaleString()} (
+              {percentage}%)
+            </div>
+          </>
+        );
+      },
+    },
+    {
+      title: "Investor",
+      key: "Investor",
       render: (text, record) => (
         <div>
-          <div style={{ color: "gray" }}>{record.dana}</div>
+          <Avatar.Group>
+            {record.investor.slice(0, 5).map((inv, index) => (
+              <Tooltip key={index} title={inv} placement="top">
+                <Avatar
+                  style={{
+                    backgroundColor: `#${Math.floor(
+                      Math.random() * 16777215
+                    ).toString(16)}`,
+                  }}
+                >
+                  {inv
+                    .split(" ")
+                    .map((word) => word.charAt(0))
+                    .join("")}
+                </Avatar>
+              </Tooltip>
+            ))}
+            {record.investor.length > 5 && (
+              <Tooltip title="Lainnya" placement="top">
+                <Avatar style={{ backgroundColor: "black" }}>
+                  {`+${record.investor.length - 5}`}
+                </Avatar>
+              </Tooltip>
+            )}
+          </Avatar.Group>
         </div>
       ),
     },
     {
-      title: "Periode",
-      key: "Periode",
+      title: "Status",
+      key: "status",
       render: (text, record) => (
-        <div>
-          <div style={{ color: "gray" }}>{record.Periode}</div>
-        </div>
+        <Badge
+          status={record.status === "Baru Mulai" ? "success" : "processing"}
+          text={record.status}
+        />
       ),
     },
     {
@@ -90,7 +145,7 @@ const ProyekPage = () => {
   const menu = (record) => (
     <Menu>
       <Menu.Item key="detail" icon={<EyeOutlined />}>
-        Detail
+        <Link to={`/proyek/${record.key}`}>Detail</Link>
       </Menu.Item>
       <Menu.Item key="edit" icon={<EditOutlined />}>
         Edit
@@ -100,7 +155,6 @@ const ProyekPage = () => {
       </Menu.Item>
     </Menu>
   );
-  // Handlers for Search and Filter
   const handleSearch = (value) => {
     const filteredData = data.filter((item) =>
       item.name.toLowerCase().includes(value.toLowerCase())
@@ -124,108 +178,6 @@ const ProyekPage = () => {
           </Button>
         </Tooltip>
       </Row>
-      <Divider orientation="left" plain>
-        Proyek Aktif
-      </Divider>
-      <Card className="shadow-md shadow-blue-300 border-l-8 border-l-blue-700 p-4">
-        <div className="grid grid-cols-2 gap-4 mb-4">
-          <div>
-            <p className="mt-0.5">
-              <span className="text-gray-500">Nomor :</span> <br />
-              PYK-2024/XI/120
-            </p>
-            <p className="mt-0.5">
-              <span className="text-gray-500">Deskripsi :</span> <br />
-              Projek Import dan Penjualan Modem Batch 1
-            </p>
-            <p className="mt-0.5">
-              <span className="text-gray-500">Target Dana :</span> <br />
-              Rp. 500.000.000 (lima ratus juta)
-            </p>
-            <Title level={5}>Investor :</Title>
-            <Avatar.Group>
-              <Tooltip title="Kang Sulton" placement="top">
-                <Avatar
-                  style={{
-                    backgroundColor: "#f56a00",
-                  }}
-                >
-                  KS
-                </Avatar>
-              </Tooltip>
-              <Tooltip title="Kang Rois" placement="top">
-                <Avatar
-                  style={{
-                    backgroundColor: "#bb2d3b",
-                  }}
-                >
-                  KR
-                </Avatar>
-              </Tooltip>
-              <Tooltip title="Kang Agus" placement="top">
-                <Avatar
-                  style={{
-                    backgroundColor: "#007bff",
-                  }}
-                >
-                  KA
-                </Avatar>
-              </Tooltip>
-            </Avatar.Group>
-          </div>
-          <div>
-            <p className="mt-0.5">
-              <span className="text-gray-500">Jumlah Saham :</span> <br />
-              100 dari 500 Lembar
-            </p>
-            <p className="mt-0.5">
-              <span className="text-gray-500">Harga Saham :</span> <br />
-              Rp. 1.000.000 / Lembar
-            </p>
-            <p className="mt-0.5">
-              <span className="text-gray-500">Durasi :</span> <br />
-              01 Januari 2025 s/d 01 juni 2025
-            </p>
-            <Title level={5}>Status Proyek :</Title>
-            <Badge status="processing" text="On Progress" />
-          </div>
-        </div>
-        <Title level={5} style={{ marginBottom: 24 }}>
-          Progres Proyek :
-        </Title>
-        <Steps
-          current={0}
-          progressDot={customDot}
-          items={[
-            {
-              title: <span className="text-sm">Pengumpulan Modal</span>,
-            },
-            {
-              title: <span className="text-sm">Pembelian Barang (Import)</span>,
-            },
-            {
-              title: <span className="text-sm">Penerimaan Barang</span>,
-            },
-            {
-              title: <span className="text-sm">Penjualan Barang</span>,
-            },
-            {
-              title: <span className="text-sm">Pembagian Dana Investor</span>,
-            },
-            {
-              title: <span className="text-sm">Proyek Selesai</span>,
-            },
-          ]}
-        />
-        <Divider />
-        <Button type="primary" block>
-          Detail
-        </Button>
-      </Card>
-
-      <Divider orientation="left" plain>
-        History
-      </Divider>
       <Row
         style={{
           marginBottom: 16,
@@ -248,7 +200,22 @@ const ProyekPage = () => {
       <div className="container mx-auto p-0">
         {/* Tampilkan Tabel di Desktop */}
         <div className="hidden lg:block">
-          <Table columns={columns} dataSource={data} />
+          <Table
+            columns={columns}
+            dataSource={data}
+            components={{
+              header: {
+                cell: (props) => (
+                  <th
+                    {...props}
+                    style={{ backgroundColor: "#1890ff", color: "white" }}
+                  >
+                    {props.children}
+                  </th>
+                ),
+              },
+            }}
+          />
         </div>
 
         {/* Tampilkan Kartu di Mobile */}

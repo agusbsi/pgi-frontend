@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import {
   Table,
   Typography,
@@ -23,170 +24,77 @@ import {
 const { Title } = Typography;
 const { Search } = Input;
 
-const BarangPage = () => {
+const BeliPage = () => {
   const [data, setData] = useState([
     {
       key: "1",
       nomor: "1",
-      deskripsi: "Modem Huawei 4G LTE",
-      tipe: "E3372",
-      merk: "Huawei",
-      barcode: "1234567890123",
-      satuan_pertama: "pcs",
-      satuan_kedua: "box",
-      konversi: 10,
-      hargaBeli: 350000,
-      hargaJual: 400000,
-      stok: 10,
+      transaksi: "PO-2024-001",
+      proyek: "PYK-2024/XI/001",
+      jumlah: 2500,
+      biaya: 300000000,
+      status: "On Progress",
+      tgl: "02 Januari 2025",
     },
     {
       key: "2",
       nomor: "2",
-      deskripsi: "Modem TP-Link WiFi",
-      tipe: "M7200",
-      merk: "TP-Link",
-      barcode: "2345678901234",
-      satuan_pertama: "pcs",
-      satuan_kedua: "box",
-      konversi: 8,
-      hargaBeli: 500000,
-      hargaJual: 550000,
-      stok: 15,
+      transaksi: "PO-2024-002",
+      proyek: "PYK-2024/XI/002",
+      jumlah: 6500,
+      biaya: 650000000,
+      status: "Diterima sebagian",
+      tgl: "04 Januari 2025",
     },
     {
       key: "3",
       nomor: "3",
-      deskripsi: "Modem ZTE MiFi",
-      tipe: "MF920",
-      merk: "ZTE",
-      barcode: "3456789012345",
-      satuan_pertama: "pcs",
-      satuan_kedua: "box",
-      konversi: 5,
-      hargaBeli: 480000,
-      hargaJual: 520000,
-      stok: 20,
-    },
-    {
-      key: "4",
-      nomor: "4",
-      deskripsi: "Modem Alcatel LinkZone",
-      tipe: "MW40",
-      merk: "Alcatel",
-      barcode: "4567890123456",
-      satuan_pertama: "pcs",
-      satuan_kedua: "box",
-      konversi: 6,
-      hargaBeli: 450000,
-      hargaJual: 500000,
-      stok: 18,
-    },
-    {
-      key: "5",
-      nomor: "5",
-      deskripsi: "Modem D-Link DWR",
-      tipe: "932C",
-      merk: "D-Link",
-      barcode: "5678901234567",
-      satuan_pertama: "pcs",
-      satuan_kedua: "box",
-      konversi: 10,
-      hargaBeli: 420000,
-      hargaJual: 460000,
-      stok: 12,
-    },
-    {
-      key: "6",
-      nomor: "6",
-      deskripsi: "Modem Netgear Nighthawk",
-      tipe: "M1",
-      merk: "Netgear",
-      barcode: "6789012345678",
-      satuan_pertama: "pcs",
-      satuan_kedua: "box",
-      konversi: 3,
-      hargaBeli: 1200000,
-      hargaJual: 1350000,
-      stok: 5,
-    },
-    {
-      key: "7",
-      nomor: "7",
-      deskripsi: "Modem Huawei 5G",
-      tipe: "CPE Pro 2",
-      merk: "Huawei",
-      barcode: "7890123456789",
-      satuan_pertama: "pcs",
-      satuan_kedua: "box",
-      konversi: 4,
-      hargaBeli: 1500000,
-      hargaJual: 1650000,
-      stok: 8,
-    },
-    {
-      key: "8",
-      nomor: "8",
-      deskripsi: "Modem TP-Link Mobile WiFi",
-      tipe: "M7350",
-      merk: "TP-Link",
-      barcode: "8901234567890",
-      satuan_pertama: "pcs",
-      satuan_kedua: "box",
-      konversi: 7,
-      hargaBeli: 600000,
-      hargaJual: 650000,
-      stok: 14,
-    },
-    {
-      key: "9",
-      nomor: "9",
-      deskripsi: "Modem ZTE 4G Pocket",
-      tipe: "MF79",
-      merk: "ZTE",
-      barcode: "9012345678901",
-      satuan_pertama: "pcs",
-      satuan_kedua: "box",
-      konversi: 9,
-      hargaBeli: 520000,
-      hargaJual: 580000,
-      stok: 10,
-    },
-    {
-      key: "10",
-      nomor: "10",
-      deskripsi: "Modem Alcatel 4G",
-      tipe: "IK40",
-      merk: "Alcatel",
-      barcode: "0123456789012",
-      satuan_pertama: "pcs",
-      satuan_kedua: "box",
-      konversi: 8,
-      hargaBeli: 470000,
-      hargaJual: 520000,
-      stok: 9,
+      transaksi: "PO-2024-003",
+      proyek: "PYK-2024/XI/003",
+      jumlah: 1500,
+      biaya: 150000000,
+      status: "Selesai",
+      tgl: "04 Januari 2025",
     },
   ]);
 
   const columns = [
     { title: "No", dataIndex: "nomor", key: "nomor" },
     {
-      title: "Deskripsi",
-      key: "deskripsi",
+      title: "No Transaksi",
+      key: "Transaksi",
       render: (text, record) => (
         <>
-          <div style={{ fontWeight: "bold" }}>{record.tipe}</div>
-          <div style={{ color: "gray" }}>{record.barcode}</div>
-          <div>{record.deskripsi}</div>
+          <div className="font-bold">{record.transaksi}</div>
+          <span className="text-xs text-gray-600">
+            Proyek : {record.proyek}
+          </span>
         </>
       ),
     },
-    { title: "Merk", dataIndex: "merk", key: "merk" },
 
-    { title: "Stok", dataIndex: "stok", key: "stok" },
     {
-      title: "Satuan",
-      dataIndex: "satuan_pertama",
-      key: "satuan_pertama",
+      title: "Jumlah",
+      key: "jumlah",
+      render: (text, record) => <div> {record.jumlah.toLocaleString()} </div>,
+    },
+
+    {
+      title: "Biaya",
+      key: "biaya",
+      render: (text, record) => (
+        <div> Rp. {record.biaya.toLocaleString()} </div>
+      ),
+    },
+    {
+      title: "Tanggal",
+      dataIndex: "tgl",
+      key: "tgl",
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
     },
     {
       title: "Aksi",
@@ -203,7 +111,7 @@ const BarangPage = () => {
   const menu = (record) => (
     <Menu>
       <Menu.Item key="Kartu" icon={<EyeOutlined />}>
-        Kartu Stok
+        <Link to={`/pembelian/${record.key}`}>Detail</Link>
       </Menu.Item>
       <Menu.Item key="edit" icon={<EditOutlined />}>
         Edit
@@ -230,11 +138,13 @@ const BarangPage = () => {
           justifyContent: "space-between",
         }}
       >
-        <Title level={2}>Stok Barang</Title>
-        <Tooltip title="Tambah Barang Baru">
-          <Button type="primary" icon={<PlusCircleOutlined />}>
-            Barang Baru
-          </Button>
+        <Title level={2}>Pembelian</Title>
+        <Tooltip title="Pembelian Baru">
+          <Link to="/pembelian/add">
+            <Button type="primary" icon={<PlusCircleOutlined />}>
+              Buat Baru
+            </Button>
+          </Link>
         </Tooltip>
       </Row>
       <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
@@ -252,10 +162,10 @@ const BarangPage = () => {
                   level={5}
                   style={{ color: "white", margin: 0 }}
                 >
-                  Total Barang
+                  Total Pembelian
                 </Typography.Title>
                 <Typography.Text style={{ color: "white", fontSize: "14px" }}>
-                  {totalItems} Jenis
+                  {totalItems} Transaksi
                 </Typography.Text>
               </Col>
               <Col>
@@ -283,10 +193,10 @@ const BarangPage = () => {
                   level={5}
                   style={{ color: "white", margin: 0 }}
                 >
-                  Stok Tertinggi
+                  On Progress
                 </Typography.Title>
                 <Typography.Text style={{ color: "white" }}>
-                  ZPE-1497
+                  2 Transaksi
                 </Typography.Text>
               </Col>
               <Col>
@@ -314,10 +224,10 @@ const BarangPage = () => {
                   level={5}
                   style={{ color: "white", margin: 0 }}
                 >
-                  Stok Terendah
+                  Selesai
                 </Typography.Title>
                 <Typography.Text style={{ color: "white" }}>
-                  ZPE-1497
+                  1 Transaksi
                 </Typography.Text>
               </Col>
               <Col>
@@ -368,4 +278,4 @@ const BarangPage = () => {
   );
 };
 
-export default BarangPage;
+export default BeliPage;

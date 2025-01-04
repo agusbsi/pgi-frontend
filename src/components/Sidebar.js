@@ -56,10 +56,10 @@ const Sidebar = () => {
         <Menu.ItemGroup key="grp" title="Menu Utama">
           <SubMenu key="6" icon={<ShoppingCartOutlined />} title="Barang Masuk">
             <Menu.Item key="6-1" icon={<ReconciliationOutlined />}>
-              <Link to="/barang-masuk/pembelian">Pembelian</Link>
+              <Link to="/pembelian">Pembelian</Link>
             </Menu.Item>
             <Menu.Item key="6-2" icon={<ShoppingCartOutlined />}>
-              <Link to="/barang-masuk/penerimaan-beli">Penerimaan Beli</Link>
+              <Link to="/penerimaan">Penerimaan Barang</Link>
             </Menu.Item>
           </SubMenu>
           <SubMenu

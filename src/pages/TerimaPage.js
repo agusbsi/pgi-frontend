@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import {
   Table,
   Typography,
@@ -16,46 +17,78 @@ import {
   EditOutlined,
   DeleteOutlined,
   MoreOutlined,
-  TeamOutlined,
+  ProductOutlined,
+  EyeOutlined,
 } from "@ant-design/icons";
 
 const { Title } = Typography;
 const { Search } = Input;
 
-const SupplierPage = () => {
+const TerimaPage = () => {
   const [data, setData] = useState([
     {
       key: "1",
       nomor: "1",
-      nama: "PT Sumber Elektronik",
-      kontak: "081234567890",
-      alamat: "Jl. Elektronik No. 123, Jakarta",
-      email: "info@sumberelektronik.com",
+      transaksi: "PB-2024-001",
+      no_beli: "PO-2024-001",
+      proyek: "PYK-2024/XI/001",
+      jumlah: 2500,
+      tgl: "02 Januari 2025",
     },
     {
       key: "2",
       nomor: "2",
-      nama: "CV Teknologi Abadi",
-      kontak: "081987654321",
-      alamat: "Jl. Teknologi No. 45, Surabaya",
-      email: "sales@teknologiabadi.com",
+      transaksi: "PB-2024-002",
+      no_beli: "PO-2024-002",
+      proyek: "PYK-2024/XI/002",
+      jumlah: 6500,
+      tgl: "04 Januari 2025",
     },
     {
       key: "3",
       nomor: "3",
-      nama: "UD Makmur Jaya",
-      kontak: "081223344556",
-      alamat: "Jl. Makmur No. 67, Bandung",
-      email: "support@makmurjaya.com",
+      transaksi: "PB-2024-003",
+      no_beli: "PO-2024-003",
+      proyek: "PYK-2024/XI/003",
+      jumlah: 1500,
+      tgl: "04 Januari 2025",
     },
   ]);
 
   const columns = [
     { title: "No", dataIndex: "nomor", key: "nomor" },
-    { title: "Nama Supplier", dataIndex: "nama", key: "nama" },
-    { title: "Kontak", dataIndex: "kontak", key: "kontak" },
-    { title: "Alamat", dataIndex: "alamat", key: "alamat" },
-    { title: "Email", dataIndex: "email", key: "email" },
+    {
+      title: "No Transaksi",
+      key: "Transaksi",
+      render: (text, record) => (
+        <>
+          <div className="font-bold">{record.transaksi}</div>
+        </>
+      ),
+    },
+    {
+      title: "No Pembelian",
+      key: "Pembelian",
+      render: (text, record) => (
+        <>
+          <div className="font-bold">{record.no_beli}</div>
+          <span className="text-xs text-gray-600">
+            Proyek : {record.proyek}
+          </span>
+        </>
+      ),
+    },
+
+    {
+      title: "Jumlah",
+      key: "jumlah",
+      render: (text, record) => <div> {record.jumlah.toLocaleString()} </div>,
+    },
+    {
+      title: "Tanggal",
+      dataIndex: "tgl",
+      key: "tgl",
+    },
     {
       title: "Aksi",
       key: "aksi",
@@ -67,8 +100,12 @@ const SupplierPage = () => {
     },
   ];
 
+  const totalItems = data.length;
   const menu = (record) => (
     <Menu>
+      <Menu.Item key="Kartu" icon={<EyeOutlined />}>
+        <Link to={`/pembelian/${record.key}`}>Detail</Link>
+      </Menu.Item>
       <Menu.Item key="edit" icon={<EditOutlined />}>
         Edit
       </Menu.Item>
@@ -80,7 +117,7 @@ const SupplierPage = () => {
 
   const handleSearch = (value) => {
     const filteredData = data.filter((item) =>
-      item.nama.toLowerCase().includes(value.toLowerCase())
+      item.name.toLowerCase().includes(value.toLowerCase())
     );
     setData(filteredData);
   };
@@ -94,46 +131,16 @@ const SupplierPage = () => {
           justifyContent: "space-between",
         }}
       >
-        <Title level={2}>Supplier</Title>
-        <Tooltip title="Tambah Supplier Baru">
-          <Button type="primary" icon={<PlusCircleOutlined />}>
-            Supplier Baru
-          </Button>
+        <Title level={2}>Penerimaan Barang</Title>
+        <Tooltip title="Penerimaan Barang">
+          <Link to="/penerimaan/add">
+            <Button type="primary" icon={<PlusCircleOutlined />}>
+              Tambah Penerimaan
+            </Button>
+          </Link>
         </Tooltip>
       </Row>
-      <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
-        <Col xs={24} sm={12} lg={8}>
-          <Card
-            style={{
-              background: "linear-gradient(135deg, #6a11cb 10%, #2575fc 90%)",
-              color: "white",
-              borderRadius: "10px",
-            }}
-          >
-            <Row align="middle" gutter={[8, 8]}>
-              <Col flex="auto">
-                <Typography.Title
-                  level={5}
-                  style={{ color: "white", margin: 0 }}
-                >
-                  Total Supplier
-                </Typography.Title>
-                <Typography.Text style={{ color: "white", fontSize: "14px" }}>
-                  {data.length} Supplier
-                </Typography.Text>
-              </Col>
-              <Col>
-                <TeamOutlined
-                  style={{
-                    fontSize: "36px",
-                    color: "white",
-                  }}
-                />
-              </Col>
-            </Row>
-          </Card>
-        </Col>
-      </Row>
+
       <Row
         style={{
           marginBottom: 16,
@@ -142,7 +149,7 @@ const SupplierPage = () => {
         }}
       >
         <Search
-          placeholder="Cari Supplier"
+          placeholder="Cari Barang"
           onSearch={handleSearch}
           allowClear
           style={{ flex: "1 1 auto", maxWidth: "300px", width: "100%" }}
@@ -170,4 +177,4 @@ const SupplierPage = () => {
   );
 };
 
-export default SupplierPage;
+export default TerimaPage;

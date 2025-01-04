@@ -8,10 +8,15 @@ const LoginPage = lazy(() => import("./pages/LoginPage"));
 const DashboardPage = lazy(() => import("./pages/DashboardPage"));
 const InvestorPage = lazy(() => import("./pages/InvestorPage"));
 const ProyekPage = lazy(() => import("./pages/ProyekPage"));
+const ProyekDetail = lazy(() => import("./pages/ProyekDetail"));
 const BarangPage = lazy(() => import("./pages/BarangPage"));
 const UserPage = lazy(() => import("./pages/UserPage"));
 const SupplierPage = lazy(() => import("./pages/SupplierPage"));
 const PelangganPage = lazy(() => import("./pages/PelangganPage"));
+const BeliPage = lazy(() => import("./pages/BeliPage"));
+const BeliAdd = lazy(() => import("./pages/BeliAdd"));
+const BeliDetail = lazy(() => import("./pages/BeliDetail"));
+const TerimaPage = lazy(() => import("./pages/TerimaPage"));
 const MainLayout = lazy(() => import("./layouts/MainLayout"));
 
 const App = () => {
@@ -58,6 +63,14 @@ const App = () => {
             }
           />
           <Route
+            path="/proyek/:id"
+            element={
+              <MainLayout>
+                <ProyekDetail />
+              </MainLayout>
+            }
+          />
+          <Route
             path="/barang"
             element={
               <MainLayout>
@@ -86,6 +99,38 @@ const App = () => {
             element={
               <MainLayout>
                 <PelangganPage />
+              </MainLayout>
+            }
+          />
+          <Route
+            path="/pembelian"
+            element={
+              <MainLayout>
+                <BeliPage />
+              </MainLayout>
+            }
+          />
+          <Route
+            path="/pembelian/add"
+            element={
+              <MainLayout>
+                <BeliAdd />
+              </MainLayout>
+            }
+          />
+          <Route
+            path="/pembelian/:id"
+            element={
+              <MainLayout>
+                <BeliDetail />
+              </MainLayout>
+            }
+          />
+          <Route
+            path="/penerimaan"
+            element={
+              <MainLayout>
+                <TerimaPage />
               </MainLayout>
             }
           />
