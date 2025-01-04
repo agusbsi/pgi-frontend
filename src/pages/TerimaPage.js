@@ -3,9 +3,7 @@ import { Link } from "react-router-dom";
 import {
   Table,
   Typography,
-  Card,
   Row,
-  Col,
   Input,
   Tooltip,
   Button,
@@ -17,7 +15,6 @@ import {
   EditOutlined,
   DeleteOutlined,
   MoreOutlined,
-  ProductOutlined,
   EyeOutlined,
 } from "@ant-design/icons";
 
@@ -100,7 +97,6 @@ const TerimaPage = () => {
     },
   ];
 
-  const totalItems = data.length;
   const menu = (record) => (
     <Menu>
       <Menu.Item key="Kartu" icon={<EyeOutlined />}>
