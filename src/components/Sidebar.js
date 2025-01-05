@@ -68,7 +68,7 @@ const Sidebar = () => {
             title="Barang Keluar"
           >
             <Menu.Item key="10-1" icon={<ReconciliationOutlined />}>
-              <Link to="/barang-masuk/pembelian">Operasional</Link>
+              <Link to="/operasional">Operasional</Link>
             </Menu.Item>
           </SubMenu>
           <Menu.Item key="7" icon={<ShoppingCartOutlined />}>

@@ -9,46 +9,52 @@ import {
   Button,
   Dropdown,
   Menu,
+  Tag,
 } from "antd";
 import {
   PlusCircleOutlined,
   EditOutlined,
   DeleteOutlined,
   MoreOutlined,
-  EyeOutlined,
 } from "@ant-design/icons";
 
 const { Title } = Typography;
 const { Search } = Input;
 
-const TerimaPage = () => {
+const JualPage = () => {
   const [data, setData] = useState([
     {
       key: "1",
       nomor: "1",
-      transaksi: "PB-2024-001",
-      no_beli: "PO-2024-001",
-      proyek: "PYK-2024/XI/001",
-      jumlah: 2500,
+      transaksi: "PJ-2024-001",
+      proyek: "PYK-2024-001",
+      pelanggan: "KDA Store",
+      jumlah: 1000,
+      nominal: 8500500,
+      status: "Menunggu Packing",
       tgl: "02 Januari 2025",
     },
     {
       key: "2",
       nomor: "2",
-      transaksi: "PB-2024-002",
-      no_beli: "PO-2024-002",
-      proyek: "PYK-2024/XI/002",
-      jumlah: 6500,
-      tgl: "04 Januari 2025",
+      transaksi: "PJ-2024-002",
+      proyek: "PYK-2024-001",
+      pelanggan: "Umum",
+      jumlah: 10,
+      nominal: 85050,
+      status: "Selesai",
+      tgl: "02 Januari 2025",
     },
     {
       key: "3",
       nomor: "3",
-      transaksi: "PB-2024-003",
-      no_beli: "PO-2024-003",
-      proyek: "PYK-2024/XI/003",
-      jumlah: 1500,
-      tgl: "04 Januari 2025",
+      transaksi: "PJ-2024-003",
+      proyek: "PYK-2024-001",
+      pelanggan: "Mitra",
+      jumlah: 100,
+      nominal: 850050,
+      status: "Dikirim",
+      tgl: "02 Januari 2025",
     },
   ]);
 
@@ -56,35 +62,42 @@ const TerimaPage = () => {
     { title: "No", dataIndex: "nomor", key: "nomor" },
     {
       title: "No Transaksi",
-      key: "Transaksi",
+      key: "transaksi",
       render: (text, record) => (
-        <>
-          <div className="font-bold">{record.transaksi}</div>
-        </>
+        <div className="font-bold">{record.transaksi}</div>
       ),
     },
     {
-      title: "No Pembelian",
-      key: "Pembelian",
-      render: (text, record) => (
-        <>
-          <div className="font-bold">{record.no_beli}</div>
-          <span className="text-xs text-gray-600">
-            Proyek : {record.proyek}
-          </span>
-        </>
-      ),
+      title: "Pelanggan",
+      key: "pelanggan",
+      render: (text, record) => <span>{record.pelanggan}</span>,
     },
-
     {
       title: "Jumlah",
       key: "jumlah",
-      render: (text, record) => <div> {record.jumlah.toLocaleString()} </div>,
+      dataIndex: "jumlah",
+      render: (jumlah) => <div>{jumlah}</div>,
     },
+    {
+      title: "Nominal",
+      key: "nominal",
+      dataIndex: "nominal",
+      render: (nominal) => <div>Rp. {nominal.toLocaleString()}</div>,
+    },
+
     {
       title: "Tanggal",
       dataIndex: "tgl",
       key: "tgl",
+    },
+    {
+      title: "Status",
+      key: "status",
+      render: (text, record) => (
+        <Tag color="magenta" bordered={false}>
+          {record.status}
+        </Tag>
+      ),
     },
     {
       title: "Aksi",
@@ -99,8 +112,11 @@ const TerimaPage = () => {
 
   const menu = (record) => (
     <Menu>
-      <Menu.Item key="Kartu" icon={<EyeOutlined />}>
-        <Link to={`/penerimaan/${record.key}`}>Detail</Link>
+      <Menu.Item key="detail" icon={<EditOutlined />}>
+        <Link to={`/penjualan/${record.key}`}>Detail</Link>
+      </Menu.Item>
+      <Menu.Item key="cetak" icon={<EditOutlined />}>
+        Cetak
       </Menu.Item>
       <Menu.Item key="edit" icon={<EditOutlined />}>
         Edit
@@ -127,11 +143,11 @@ const TerimaPage = () => {
           justifyContent: "space-between",
         }}
       >
-        <Title level={2}>Penerimaan Barang</Title>
+        <Title level={2}>Penjualan</Title>
         <Tooltip title="Penerimaan Barang">
-          <Link to="/penerimaan/add">
+          <Link to="/penjualan/add">
             <Button type="primary" icon={<PlusCircleOutlined />}>
-              Tambah Penerimaan
+              Tambah Penjualan
             </Button>
           </Link>
         </Tooltip>
@@ -173,4 +189,4 @@ const TerimaPage = () => {
   );
 };
 
-export default TerimaPage;
+export default JualPage;

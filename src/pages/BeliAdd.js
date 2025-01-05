@@ -26,6 +26,9 @@ const BeliAdd = () => {
   const [biayaKirim, setBiayaKirim] = useState(0);
   const [biayaCukai, setBiayaCukai] = useState(0);
   const [biayaLain, setBiayaLain] = useState(0);
+  const [jenisProfit, setJenisProfit] = useState(null);
+  const [profitPersen, setProfitPersen] = useState("");
+  const [profitNominal, setProfitNominal] = useState("");
 
   // Data dummy untuk nama barang
   const barangOptions = [
@@ -126,8 +129,9 @@ const BeliAdd = () => {
       </Space>
       <Card className="shadow-md shadow-blue-300 mt-3">
         <Form form={form} layout="vertical" onFinish={handleSubmit}>
-          <div className="grid grid-cols-2 gap-4 mb-4">
-            <div>
+          <div className="grid grid-cols-3 gap-3 mb-3">
+            {/* Kolom 1 */}
+            <div className="space-y-2">
               <Form.Item
                 label="Nomor"
                 name="nomor"
@@ -148,7 +152,9 @@ const BeliAdd = () => {
                 </Select>
               </Form.Item>
             </div>
-            <div>
+
+            {/* Kolom 2 */}
+            <div className="space-y-2">
               <Form.Item label="Biaya Kirim">
                 <Input
                   value={formatRupiah(biayaKirim)}
@@ -168,7 +174,54 @@ const BeliAdd = () => {
                 />
               </Form.Item>
             </div>
+
+            {/* Kolom 3 */}
+            <div className="space-y-2">
+              <Form.Item label="Jenis Profit">
+                <Select
+                  value={jenisProfit}
+                  onChange={(value) => setJenisProfit(value)}
+                  placeholder="Pilih Jenis Profit"
+                >
+                  <Option value="persen">Persen (%)</Option>
+                  <Option value="nominal">Nominal</Option>
+                </Select>
+              </Form.Item>
+
+              {jenisProfit === "persen" && (
+                <Form.Item label="Persen (%)">
+                  <Input
+                    placeholder="Masukkan persentase profit"
+                    value={profitPersen}
+                    onChange={(e) => setProfitPersen(e.target.value)}
+                  />
+                </Form.Item>
+              )}
+
+              {jenisProfit === "nominal" && (
+                <Form.Item label="Nominal">
+                  <Input
+                    placeholder="Masukkan nominal profit"
+                    value={formatRupiah(profitNominal)}
+                    onChange={(e) =>
+                      setProfitNominal(parseRupiah(e.target.value))
+                    }
+                  />
+                </Form.Item>
+              )}
+              <p className="text-red-700">
+                Untuk Semua Barang, Harga jual per barang akan ditambahkan
+                sebesar{" "}
+                {jenisProfit === "persen" && profitPersen
+                  ? `${profitPersen} %`
+                  : jenisProfit === "nominal" && profitNominal
+                  ? `Rp ${formatRupiah(profitNominal)}`
+                  : "..."}{" "}
+                dari harga beli.
+              </p>
+            </div>
           </div>
+
           <Divider />
           <p className="font-black">List Barang:</p>
           <Table

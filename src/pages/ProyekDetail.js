@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 import {
   Table,
   Typography,
@@ -14,6 +16,7 @@ import {
   Badge,
   Popover,
   Space,
+  Tag,
 } from "antd";
 import {
   LeftCircleOutlined,
@@ -55,6 +58,7 @@ const ProyekPage = () => {
       investor: "Kang Sulton",
       saham: "50 Lembar",
       modal: 50000000,
+      tanggal: "02 Januari 2024",
     },
     {
       key: "2",
@@ -63,6 +67,7 @@ const ProyekPage = () => {
       investor: "Kang Rois",
       saham: "240 Lembar",
       modal: 240000000,
+      tanggal: "02 Januari 2024",
     },
     {
       key: "3",
@@ -71,6 +76,7 @@ const ProyekPage = () => {
       investor: "Kang Salam",
       saham: "150 Lembar",
       modal: 150000000,
+      tanggal: "02 Januari 2024",
     },
   ]);
   const columns = [
@@ -109,7 +115,11 @@ const ProyekPage = () => {
   ];
   const menu = (record) => (
     <Menu>
-      <Menu.Item key="detail" icon={<EyeOutlined />}>
+      <Menu.Item
+        key="detail"
+        icon={<EyeOutlined />}
+        onClick={() => generatePDF(record)}
+      >
         Cetak Surat
       </Menu.Item>
       <Menu.Item key="edit" icon={<EditOutlined />}>
@@ -120,6 +130,147 @@ const ProyekPage = () => {
       </Menu.Item>
     </Menu>
   );
+  const generatePDF = (record) => {
+    const doc = new jsPDF();
+
+    // Watermark setup
+    doc.setFontSize(20);
+    doc.setTextColor(235);
+    const watermarkText = "PGI - ASLI";
+    const startX = -40;
+    const startY = -40;
+    const stepX = 80;
+    const stepY = 80;
+    const angle = 45;
+
+    for (let x = startX; x < 300; x += stepX) {
+      for (let y = startY; y < 300; y += stepY) {
+        doc.text(watermarkText, x, y, {
+          angle: angle,
+          align: "center",
+        });
+      }
+    }
+
+    // Document Title
+    doc.setTextColor(50);
+    doc.setFont("Times", "bold");
+    doc.setFontSize(14);
+    doc.text(
+      "SURAT PERJANJIAN KERJASAMA INVESTASI",
+      105,
+      20,
+      null,
+      null,
+      "center"
+    );
+    doc.setLineWidth(0.5);
+    doc.line(10, 25, 200, 25);
+
+    // Opening Information
+    doc.setFont("Times", "normal");
+    doc.setFontSize(12);
+    doc.text(
+      "Pada hari, minggu tanggal 02 bulan Januari Tahun 2025, yang bertanda tangan di bawah ini:",
+      20,
+      35,
+      { maxWidth: 170 }
+    );
+
+    // Table Data PIHAK PERTAMA
+    const tableData1 = [
+      ["1. Nama", record.investor],
+      ["   NIK", record.nik || "321020260894003"],
+      ["   Alamat", record.alamat || "Jln. Paarstembok Jambewangi, Sempu"],
+      ["   NPWP", record.npwp || "1105105015151"],
+    ];
+
+    const tableData2 = [
+      ["2. Nama", ": Sulton Fatoni"],
+      ["   NIK", ": 321020260894003"],
+      ["   Alamat", ": Jln. Paarstembok Jambewangi, Sempu"],
+      ["   NPWP", ": 1105105015151"],
+      ["   Jabatan", ": Pengelola Dana"],
+    ];
+
+    doc.autoTable({
+      body: tableData1,
+      startY: 45,
+      styles: {
+        font: "Times",
+        fontSize: 10,
+        cellPadding: 3,
+      },
+      theme: "plain",
+    });
+
+    let yPos = doc.previousAutoTable.finalY + 10;
+    doc.text("Untuk selanjutnya disebut sebagai PIHAK PERTAMA.", 20, yPos);
+
+    // Table Data PIHAK KEDUA
+    doc.autoTable({
+      body: tableData2,
+      startY: yPos + 5,
+      styles: {
+        font: "Times",
+        fontSize: 10,
+        cellPadding: 3,
+      },
+      theme: "plain",
+    });
+
+    yPos = doc.previousAutoTable.finalY + 10;
+    doc.text("Untuk selanjutnya disebut sebagai PIHAK KEDUA.", 20, yPos);
+
+    // Cooperation Details
+    yPos += 10;
+    doc.text(
+      "Bahwa sebelum ditanda tanganinya Surat Perjanjian ini, Para pihak terlebih dahulu menerangkan hal–hal sebagai berikut:",
+      20,
+      yPos,
+      { maxWidth: 170 }
+    );
+    yPos += 10;
+    doc.text(
+      `1. Pihak Pertama adalah INVESTOR yang memiliki modal sebesar Rp.${record.modal.toLocaleString()},- untuk selanjutnya disebut sebagai MODAL INVESTASI untuk project.`,
+      20,
+      yPos,
+      { maxWidth: 170 }
+    );
+
+    yPos += 10;
+    doc.text(
+      "2. Bahwa Pihak Kedua adalah Pengelola Dana Investasi di bidang ……………………. yang berlokasi di………………………………. yang menerima DANA INVESTASI dari Pihak Pertama.",
+      20,
+      yPos,
+      { maxWidth: 170 }
+    );
+
+    yPos += 20;
+    doc.text(
+      "Dengan ini Pihak Pertama dan Pihak Kedua sepakat untuk melaksanakan Perjanjian Kerjasama.",
+      20,
+      yPos,
+      { maxWidth: 170 }
+    );
+
+    // Clause Section
+    yPos += 10;
+    doc.setFont("Times", "bold");
+    doc.text("PASAL I: MAKSUD DAN TUJUAN", 20, yPos);
+
+    yPos += 10;
+    doc.setFont("Times", "normal");
+    doc.text(
+      `Pihak Pertama memberi dana investasi kepada Pihak Kedua sebesar Rp.${record.modal.toLocaleString()},-.`,
+      20,
+      yPos,
+      { maxWidth: 170 }
+    );
+
+    // Save PDF
+    doc.save(`Kontrak_${record.kontrak || "Investasi"}.pdf`);
+  };
 
   return (
     <div className="mt-3">
@@ -196,23 +347,66 @@ const ProyekPage = () => {
         <p className="font-black">Pengaturan Penjualan :</p>
         <div className="grid grid-cols-3 gap-4 mb-4">
           <div>
+            <Tag color="magenta">Harga Ecer</Tag>
             <p className="mt-0.5">
               <span className="text-gray-500"> Profit :</span> <br />
               Rp. 30.000 / Barang
             </p>
+            <p className="mt-0.5">
+              <span className="text-gray-500"> Syarat :</span> <br />
+              Jumlah jual kurang dari 50 pcs
+            </p>
           </div>
           <div>
+            <Tag color="magenta">Harga Grosir 1</Tag>
             <p className="mt-0.5">
-              <span className="text-gray-500"> Minimal Grosir 1 :</span> <br />
-              50 - 99 Pcs
+              <span className="text-gray-500"> Profit :</span> <br />
+              Rp. 27.000 / Barang
+            </p>
+            <p className="mt-0.5">
+              <span className="text-gray-500"> Syarat :</span> <br />
+              Jumlah jual 50 - 99 Pcs
+            </p>
+          </div>
+          <div>
+            <Tag color="magenta">Harga Grosir 2</Tag>
+            <p className="mt-0.5">
+              <span className="text-gray-500"> Profit :</span> <br />
+              Rp. 25.000 / Barang
+            </p>
+            <p className="mt-0.5">
+              <span className="text-gray-500"> Syarat :</span> <br />
+              Jumlah jual lebih dari 100 pcs
+            </p>
+          </div>
+        </div>
+      </Card>
+      <Card className="shadow-md shadow-blue-300 mt-3">
+        <p className="font-black">Stok Barang di proyek ini:</p>
+        <div className="grid grid-cols-3 gap-4 mb-4">
+          <div>
+            <p className="mt-0.5">
+              <span className="text-gray-500"> Total Stok :</span> <br />
+              2100 Pcs
             </p>
           </div>
           <div>
             <p className="mt-0.5">
-              <span className="text-gray-500">Minimal Grosir 2:</span> <br />
-              100 pcs - tak terhingga
+              <span className="text-gray-500"> Terjual :</span> <br />
+              1500 Pcs
             </p>
           </div>
+          <div>
+            <p className="mt-0.5">
+              <span className="text-gray-500"> Sisa :</span> <br />
+              600 Pcs
+            </p>
+          </div>
+        </div>
+        <div className="flex justify-end">
+          <Button type="primary" icon={<PlusCircleOutlined />}>
+            Lihat Stok lengkap
+          </Button>
         </div>
       </Card>
       <Divider />

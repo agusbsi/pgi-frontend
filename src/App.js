@@ -17,6 +17,11 @@ const BeliPage = lazy(() => import("./pages/BeliPage"));
 const BeliAdd = lazy(() => import("./pages/BeliAdd"));
 const BeliDetail = lazy(() => import("./pages/BeliDetail"));
 const TerimaPage = lazy(() => import("./pages/TerimaPage"));
+const TerimaDetail = lazy(() => import("./pages/TerimaDetail"));
+const OperasionalPage = lazy(() => import("./pages/OperasionalPage"));
+const JualPage = lazy(() => import("./pages/JualPage"));
+const JualDetail = lazy(() => import("./pages/JualDetail"));
+const JualAdd = lazy(() => import("./pages/JualAdd"));
 const MainLayout = lazy(() => import("./layouts/MainLayout"));
 
 const App = () => {
@@ -131,6 +136,46 @@ const App = () => {
             element={
               <MainLayout>
                 <TerimaPage />
+              </MainLayout>
+            }
+          />
+          <Route
+            path="/penerimaan/:id"
+            element={
+              <MainLayout>
+                <TerimaDetail />
+              </MainLayout>
+            }
+          />
+          <Route
+            path="/operasional"
+            element={
+              <MainLayout>
+                <OperasionalPage />
+              </MainLayout>
+            }
+          />
+          <Route
+            path="/penjualan"
+            element={
+              <MainLayout>
+                <JualPage />
+              </MainLayout>
+            }
+          />
+          <Route
+            path="/penjualan/:id"
+            element={
+              <MainLayout>
+                <JualDetail />
+              </MainLayout>
+            }
+          />
+          <Route
+            path="/penjualan/add"
+            element={
+              <MainLayout>
+                <JualAdd />
               </MainLayout>
             }
           />

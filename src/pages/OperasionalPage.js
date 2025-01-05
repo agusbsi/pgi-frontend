@@ -9,46 +9,37 @@ import {
   Button,
   Dropdown,
   Menu,
+  Tag,
 } from "antd";
 import {
   PlusCircleOutlined,
   EditOutlined,
   DeleteOutlined,
   MoreOutlined,
-  EyeOutlined,
 } from "@ant-design/icons";
 
 const { Title } = Typography;
 const { Search } = Input;
 
-const TerimaPage = () => {
+const OperasionalPage = () => {
   const [data, setData] = useState([
     {
       key: "1",
       nomor: "1",
-      transaksi: "PB-2024-001",
-      no_beli: "PO-2024-001",
-      proyek: "PYK-2024/XI/001",
-      jumlah: 2500,
+      transaksi: "OP-2024-001",
+      deskripsi: "Pembelian alat packing lengkap",
+      nominal: 250500,
+      sumber: ["PYK-2024-001", "PYK-2024-002"],
       tgl: "02 Januari 2025",
     },
     {
       key: "2",
       nomor: "2",
-      transaksi: "PB-2024-002",
-      no_beli: "PO-2024-002",
-      proyek: "PYK-2024/XI/002",
-      jumlah: 6500,
-      tgl: "04 Januari 2025",
-    },
-    {
-      key: "3",
-      nomor: "3",
-      transaksi: "PB-2024-003",
-      no_beli: "PO-2024-003",
-      proyek: "PYK-2024/XI/003",
-      jumlah: 1500,
-      tgl: "04 Januari 2025",
+      transaksi: "OP-2024-002",
+      deskripsi: "Pembelian Alat tulis pembukuan",
+      nominal: 20500,
+      sumber: ["PYK-2024-001"],
+      tgl: "02 Januari 2025",
     },
   ]);
 
@@ -56,30 +47,35 @@ const TerimaPage = () => {
     { title: "No", dataIndex: "nomor", key: "nomor" },
     {
       title: "No Transaksi",
-      key: "Transaksi",
-      render: (text, record) => (
-        <>
-          <div className="font-bold">{record.transaksi}</div>
-        </>
-      ),
+      key: "transaksi",
+      dataIndex: "transaksi",
+      render: (text) => <div className="font-bold">{text}</div>,
     },
     {
-      title: "No Pembelian",
-      key: "Pembelian",
-      render: (text, record) => (
-        <>
-          <div className="font-bold">{record.no_beli}</div>
-          <span className="text-xs text-gray-600">
-            Proyek : {record.proyek}
-          </span>
-        </>
-      ),
+      title: "Deskripsi",
+      key: "deskripsi",
+      dataIndex: "deskripsi",
+      render: (text) => <span className="text-xs text-gray-600">{text}</span>,
     },
-
     {
-      title: "Jumlah",
-      key: "jumlah",
-      render: (text, record) => <div> {record.jumlah.toLocaleString()} </div>,
+      title: "Nominal",
+      key: "nominal",
+      dataIndex: "nominal",
+      render: (nominal) => <div>Rp. {nominal.toLocaleString()}</div>,
+    },
+    {
+      title: "Sumber Dana",
+      key: "sumber",
+      dataIndex: "sumber",
+      render: (sumber) => (
+        <div>
+          {sumber.map((item, index) => (
+            <Tag color="magenta" key={index}>
+              {item}
+            </Tag>
+          ))}
+        </div>
+      ),
     },
     {
       title: "Tanggal",
@@ -99,9 +95,6 @@ const TerimaPage = () => {
 
   const menu = (record) => (
     <Menu>
-      <Menu.Item key="Kartu" icon={<EyeOutlined />}>
-        <Link to={`/penerimaan/${record.key}`}>Detail</Link>
-      </Menu.Item>
       <Menu.Item key="edit" icon={<EditOutlined />}>
         Edit
       </Menu.Item>
@@ -127,11 +120,11 @@ const TerimaPage = () => {
           justifyContent: "space-between",
         }}
       >
-        <Title level={2}>Penerimaan Barang</Title>
+        <Title level={2}>Operasional</Title>
         <Tooltip title="Penerimaan Barang">
           <Link to="/penerimaan/add">
             <Button type="primary" icon={<PlusCircleOutlined />}>
-              Tambah Penerimaan
+              Tambah Operasional
             </Button>
           </Link>
         </Tooltip>
@@ -173,4 +166,4 @@ const TerimaPage = () => {
   );
 };
 
-export default TerimaPage;
+export default OperasionalPage;

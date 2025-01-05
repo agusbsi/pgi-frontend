@@ -142,7 +142,7 @@ const BeliPage = () => {
         <Tooltip title="Pembelian Baru">
           <Link to="/pembelian/add">
             <Button type="primary" icon={<PlusCircleOutlined />}>
-              Buat Baru
+              Tambah Pembelian
             </Button>
           </Link>
         </Tooltip>
