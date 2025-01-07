@@ -22,6 +22,9 @@ const OperasionalPage = lazy(() => import("./pages/OperasionalPage"));
 const JualPage = lazy(() => import("./pages/JualPage"));
 const JualDetail = lazy(() => import("./pages/JualDetail"));
 const JualAdd = lazy(() => import("./pages/JualAdd"));
+const PackingPage = lazy(() => import("./pages/PackingPage"));
+const ReturPage = lazy(() => import("./pages/ReturPage"));
+const GaransiPage = lazy(() => import("./pages/GaransiPage"));
 const MainLayout = lazy(() => import("./layouts/MainLayout"));
 
 const App = () => {
@@ -176,6 +179,30 @@ const App = () => {
             element={
               <MainLayout>
                 <JualAdd />
+              </MainLayout>
+            }
+          />
+          <Route
+            path="/packing"
+            element={
+              <MainLayout>
+                <PackingPage />
+              </MainLayout>
+            }
+          />
+          <Route
+            path="/retur"
+            element={
+              <MainLayout>
+                <ReturPage />
+              </MainLayout>
+            }
+          />
+          <Route
+            path="/cek-garansi"
+            element={
+              <MainLayout>
+                <GaransiPage />
               </MainLayout>
             }
           />

@@ -55,28 +55,37 @@ const ProyekPage = () => {
       key: "1",
       no: "1",
       kontrak: "PYK-2024/XI/001/001",
+      desc: "Proyek Import dan penjualan Modem Batch 1",
       investor: "Kang Sulton",
       saham: "50 Lembar",
+      hargaLembar: 1000000,
       modal: 50000000,
       tanggal: "02 Januari 2024",
+      alamat: "Jln. Parastembok Jambewangi, Sempu, Banyuwangi",
     },
     {
       key: "2",
       no: "2",
       kontrak: "PYK-2024/XI/001/002",
+      desc: "Proyek Import dan penjualan Modem Batch 1",
       investor: "Kang Rois",
       saham: "240 Lembar",
+      hargaLembar: 1000000,
       modal: 240000000,
       tanggal: "02 Januari 2024",
+      alamat: "Jln. Parastembok Jambewangi, Sempu, Banyuwangi",
     },
     {
       key: "3",
       no: "3",
       kontrak: "PYK-2024/XI/001/003",
+      desc: "Proyek Import dan penjualan Modem Batch 1",
       investor: "Kang Salam",
       saham: "150 Lembar",
+      hargaLembar: 1000000,
       modal: 150000000,
       tanggal: "02 Januari 2024",
+      alamat: "Jln. Parastembok Jambewangi, Sempu, Banyuwangi",
     },
   ]);
   const columns = [
@@ -102,6 +111,11 @@ const ProyekPage = () => {
       render: (text, record) => (
         <p className="font-bold">Rp. {record.modal.toLocaleString()}</p>
       ),
+    },
+    {
+      title: "Tanggal",
+      key: "tanggal",
+      render: (text, record) => <p>{record.tanggal}</p>,
     },
     {
       title: "Menu",
@@ -130,32 +144,49 @@ const ProyekPage = () => {
       </Menu.Item>
     </Menu>
   );
+  const getDayName = (dateString) => {
+    const [day, month, year] = dateString.split(" ");
+    const date = new Date(`${year}-${month}-${day}`);
+    const dayNames = [
+      "Minggu",
+      "Senin",
+      "Selasa",
+      "Rabu",
+      "Kamis",
+      "Jumat",
+      "Sabtu",
+    ];
+    return dayNames[date.getDay()];
+  };
+
   const generatePDF = (record) => {
     const doc = new jsPDF();
+    const dayName = getDayName(record.tanggal);
+    // Add Watermark on Each Page
+    const addWatermark = (doc) => {
+      doc.saveGraphicsState();
+      doc.setFontSize(35);
+      doc.setTextColor(240);
 
-    // Watermark setup
-    doc.setFontSize(20);
-    doc.setTextColor(235);
-    const watermarkText = "PGI - ASLI";
-    const startX = -40;
-    const startY = -40;
-    const stepX = 80;
-    const stepY = 80;
-    const angle = 45;
+      const watermarkText = "DOKUMEN PGI ASLI";
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+      const stepY = 150;
 
-    for (let x = startX; x < 300; x += stepX) {
-      for (let y = startY; y < 300; y += stepY) {
-        doc.text(watermarkText, x, y, {
-          angle: angle,
-          align: "center",
-        });
+      for (let y = -30; y < pageHeight + 50; y += stepY) {
+        for (let x = -50; x < pageWidth + 50; x += 110) {
+          doc.text(watermarkText, x, y, {
+            angle: 45,
+          });
+        }
       }
-    }
+      doc.restoreGraphicsState();
+    };
 
-    // Document Title
+    addWatermark(doc);
+    // Header
+    doc.setFontSize(16);
     doc.setTextColor(50);
-    doc.setFont("Times", "bold");
-    doc.setFontSize(14);
     doc.text(
       "SURAT PERJANJIAN KERJASAMA INVESTASI",
       105,
@@ -164,31 +195,35 @@ const ProyekPage = () => {
       null,
       "center"
     );
-    doc.setLineWidth(0.5);
-    doc.line(10, 25, 200, 25);
 
-    // Opening Information
-    doc.setFont("Times", "normal");
+    // Garis bawah untuk header
+    doc.setDrawColor(50); // Warna garis (default: hitam)
+    doc.line(40, 22, 170, 22); // (x1, y1, x2, y2): Koordinat awal dan akhir garis
+
+    // Subheader
     doc.setFontSize(12);
+    doc.text(`Nomor: ${record.kontrak}`, 105, 28, null, null, "center");
+
+    // Content
+    doc.setFontSize(10);
     doc.text(
-      "Pada hari, minggu tanggal 02 bulan Januari Tahun 2025, yang bertanda tangan di bawah ini:",
-      20,
-      35,
+      `Pada hari ${dayName}, tanggal ${record.tanggal}, yang bertanda tangan di bawah ini:`,
+      15,
+      40,
       { maxWidth: 170 }
     );
-
-    // Table Data PIHAK PERTAMA
     const tableData1 = [
-      ["1. Nama", record.investor],
-      ["   NIK", record.nik || "321020260894003"],
-      ["   Alamat", record.alamat || "Jln. Paarstembok Jambewangi, Sempu"],
-      ["   NPWP", record.npwp || "1105105015151"],
+      ["1. Nama", `: ${record.investor}`],
+      ["   NIK", `: ${record.nik || "[kosong]"}`],
+      ["   Alamat", `: ${record.alamat || "[kosong]"}`],
+      ["   NPWP", `: ${record.npwp || "[kosong]"}`],
     ];
 
+    // Table Data PIHAK KEDUA
     const tableData2 = [
       ["2. Nama", ": Sulton Fatoni"],
       ["   NIK", ": 321020260894003"],
-      ["   Alamat", ": Jln. Paarstembok Jambewangi, Sempu"],
+      ["   Alamat", ": Jln. Parastembok Jambewangi, Sempu, Banyuwangi"],
       ["   NPWP", ": 1105105015151"],
       ["   Jabatan", ": Pengelola Dana"],
     ];
@@ -199,79 +234,103 @@ const ProyekPage = () => {
       styles: {
         font: "Times",
         fontSize: 10,
-        cellPadding: 3,
+        cellPadding: 1,
       },
       theme: "plain",
     });
 
-    let yPos = doc.previousAutoTable.finalY + 10;
-    doc.text("Untuk selanjutnya disebut sebagai PIHAK PERTAMA.", 20, yPos);
-
-    // Table Data PIHAK KEDUA
+    let yPos = doc.previousAutoTable.finalY + 5;
+    doc.text("Untuk selanjutnya disebut sebagai PIHAK PERTAMA.", 15, yPos);
     doc.autoTable({
       body: tableData2,
       startY: yPos + 5,
       styles: {
         font: "Times",
         fontSize: 10,
-        cellPadding: 3,
+        cellPadding: 1,
       },
       theme: "plain",
     });
 
-    yPos = doc.previousAutoTable.finalY + 10;
-    doc.text("Untuk selanjutnya disebut sebagai PIHAK KEDUA.", 20, yPos);
-
-    // Cooperation Details
+    yPos = doc.previousAutoTable.finalY + 5;
+    doc.text("Untuk selanjutnya disebut sebagai PIHAK KEDUA.", 15, yPos);
     yPos += 10;
     doc.text(
-      "Bahwa sebelum ditanda tanganinya Surat Perjanjian ini, Para pihak terlebih dahulu menerangkan hal–hal sebagai berikut:",
-      20,
+      `Bahwa sebelum ditanda tanganinya Surat Perjanjian ini, Para pihak terlebih dahulu menerangkan hal–hal sebagai berikut: \n\n` +
+        `1. Bahwa Pihak Pertama adalah selaku INVESTOR yang memiliki modal sebesar Rp.${record.modal.toLocaleString()},-  untuk selanjutnya disebut sebagai MODAL INVESTASI untuk project " ${
+          record.desc
+        } ". \n\n` +
+        `2. Bahwa Pihak Kedua adalah Pengelola Dana Investasi di bidang Importir dan perdagangan yang berlokasi di area banyuwangi yang menerima DANA INVESTASI dari Pihak Pertama. \n\n` +
+        `3. Dana Investasi dari pihak pertama yang kemudian di rubah oleh pihak kedua menjadi perhitungan SAHAM LEMBARAN, dimana setiap LEMBAR SAHAM ternilai Rp.${record.hargaLembar.toLocaleString()},- \n\n` +
+        `4. Kepemilikan SAHAM Pihak Pertama dijelaskan sebagai berikut :\n` +
+        `       a). MODAL INVESTASI	: Rp.${record.modal.toLocaleString()} \n` +
+        `       b). LEMBAR SAHAM	    : ${record.saham} \n\n` +
+        `5. Bahwa Pihak Pertama dan Pihak Kedua setuju untuk saling mengikatkan diri dalam suatu perjanjian kerjasama Investasi dalam Peningkatan Modal Investasi di project " ${record.desc} " yang berlokasi di area banyuwangi, sesuai dengan ketentuan hukum yang berlaku.\n\n` +
+        `6. Bahwa berdasarkan hal-hal diatas, kedua belah pihak menyatakan sepakat dan setuju untuk mengadakan Perjanjian Kerjasama ini yang dilaksanakan dengan ketentuan dan syarat-syarat sebagai berikut :\n\n`,
+      15,
       yPos,
       { maxWidth: 170 }
     );
+    yPos += 100;
+    doc.text(`PASAL I`, 105, yPos, null, null, "center");
+    yPos += 5;
+    doc.setFont("helvetica", "bold");
+    doc.text(`MAKSUD DAN TUJUAN`, 105, yPos, null, null, "center");
+    doc.setFont("helvetica", "normal");
     yPos += 10;
     doc.text(
-      `1. Pihak Pertama adalah INVESTOR yang memiliki modal sebesar Rp.${record.modal.toLocaleString()},- untuk selanjutnya disebut sebagai MODAL INVESTASI untuk project.`,
-      20,
-      yPos,
-      { maxWidth: 170 }
-    );
-
-    yPos += 10;
-    doc.text(
-      "2. Bahwa Pihak Kedua adalah Pengelola Dana Investasi di bidang ……………………. yang berlokasi di………………………………. yang menerima DANA INVESTASI dari Pihak Pertama.",
-      20,
-      yPos,
-      { maxWidth: 170 }
-    );
-
-    yPos += 20;
-    doc.text(
-      "Dengan ini Pihak Pertama dan Pihak Kedua sepakat untuk melaksanakan Perjanjian Kerjasama.",
-      20,
-      yPos,
-      { maxWidth: 170 }
-    );
-
-    // Clause Section
-    yPos += 10;
-    doc.setFont("Times", "bold");
-    doc.text("PASAL I: MAKSUD DAN TUJUAN", 20, yPos);
-
-    yPos += 10;
-    doc.setFont("Times", "normal");
-    doc.text(
-      `Pihak Pertama memberi dana investasi kepada Pihak Kedua sebesar Rp.${record.modal.toLocaleString()},-.`,
-      20,
+      `Pihak Pertama dalam perjanjian ini memberi DANA INVESTASI kepada Pihak Kedua sebesar Rp. ${record.modal.toLocaleString()},- dan Pihak Kedua dengan ini telah menerima penyerahan DANA INVESTASI tersebut dari Pihak Pertama serta menyanggupi untuk melaksanakan pengelolaan DANA INVESTASI tersebut.`,
+      15,
       yPos,
       { maxWidth: 170 }
     );
 
-    // Save PDF
-    doc.save(`Kontrak_${record.kontrak || "Investasi"}.pdf`);
+    // Add page for extended details
+    doc.addPage();
+    addWatermark(doc);
+    doc.text(`PASAL II`, 105, 20, null, null, "center");
+    doc.setFont("helvetica", "bold");
+    doc.text(`RUANG LINGKUP`, 105, 25, null, null, "center");
+    doc.setFont("helvetica", "normal");
+    doc.text(
+      `1. Dalam pelaksanaan perjanjian ini, Pihak Pertama memberi DANA INVESTASI kepada Pihak Kedua sebesar Rp. ………………………,- (terbilan) dan Pihak Kedua dengan ini telah menerima penyerahan DANA INVESTASI tersebut dari Pihak Pertama serta menyanggupi untuk  melaksanakan pengelolaan DANA INVESTASI. \n\n` +
+        `2. Pihak Kedua dengan ini berjanji dan mengikatkan diri untuk melaksanakan perputaran DANA INVESTASI pada Usaha Peningkatan Modal Investasi di bidang ……………………. yang berlokasi di…………………………………………… setelah ditanda tanganinya perjanjian ini. \n\n` +
+        `3. Pihak Kedua dengan ini berjanji dan mengikatkan diri untuk memberikan keuntungan berdasarkan persentase dari hasil dan resiko setelah pengurangan modal operasional yang terhitung dalam lembaran saham yang berlaku adalah 10% (sepuluh persen) untuk pihak keduan dan 90% untuk pihak pertama dalam jangka waktu 6 bulan atau musiman.`,
+      15,
+      35,
+      { maxWidth: 170 }
+    );
+    doc.text(`PASAL III`, 105, 95, null, null, "center");
+    doc.setFont("helvetica", "bold");
+    doc.text(`JANGKA WAKTU KERJASAMA`, 105, 100, null, null, "center");
+    doc.setFont("helvetica", "normal");
+    doc.text(
+      `1. Perjanjian kerjasama ini dilakukan dan diterima untuk jangka waktu 6 bulan (enam) bulan atau 1 musim, terhitung sejak tanggal ………………………. dengan periode jatuh tempo yang disepakati, kesepakatan   bersama antara pihak pertama dan pihak kedua sebagaimana 100% laba diberikan kepada pihak pertama dan kedua setelah perhitungan laba bersih di kurangi operasional dan  PASAL V ayat 3. dan di serahkan pada tanggal ………………….. secara utuh tanpa potongan serta dapat diperpanjang atau di perbarui dengan persetujuan kedua belah pihak untuk jangka waktu selanjutnya. \n\n` +
+        `2. Jangka waktu perjanjian berakhir pada tanggal jatuh tempo yang sudah disepakati bersama antara pihak pertama dan pihak kedua dan tidak bisa di tarik atau dicairkan di tengah perjalanan suatu periode atau sewaktu-waktu dengan keinginan sepihak oleh pihak pertama. \n\n` +
+        `3. Perjanjian kerjasama mengikat setiap periode atau musim yang telah ditentukan pihak ke dua yaitu 6 bulan atau 1 musim, setelah periode yang di tentukan masuk dalam jatuh tempo maka laba yang disebut DEVIDEN lembaran saham diberikan dan kemudian modal bisa di tarik atau tetap di digunakan sebagai perjalanan bisnis selanjutnya dengan cara melakukan pembaruan perjanjian kerjasama investasi.`,
+      15,
+      110,
+      { maxWidth: 170 }
+    );
+    doc.text(`PASAL IV`, 105, 180, null, null, "center");
+    doc.setFont("helvetica", "bold");
+    doc.text(`HAK DAN KEWAJIBAN PIHAK PERTAMA`, 105, 185, null, null, "center");
+    doc.setFont("helvetica", "normal");
+    doc.text(
+      `Dalam Perjanjian Kerjasama ini, Pihak Pertama memiliki Hak dan Kewajiban sebagai berikut : \n\n` +
+        `1. Pihak pertama memberikan DANA INVESTASI kepada Pihak Kedua sebesar Rp. ………………………..,- (terbilang). \n\n` +
+        `2. Pihak pertama berhak meminta kembali DANA INVESTASI yang telah diserahkan kepada Pihak Kedua dengan ketentuan berdasarkan Pasal III Ayat 2. \n\n` +
+        `3.  Pihak pertama menerima hasil keuntungan atas pengelolaan DANA INVESTASI, sesuai dengan Pasal VI dalam perjanjian ini.`,
+      15,
+      195,
+      { maxWidth: 170 }
+    );
+
+    // Open the PDF in a new browser tab
+    const pdfBlob = doc.output("blob");
+    const pdfUrl = URL.createObjectURL(pdfBlob);
+    window.open(pdfUrl, "_blank");
   };
-
   return (
     <div className="mt-3">
       <Space>
@@ -404,9 +463,7 @@ const ProyekPage = () => {
           </div>
         </div>
         <div className="flex justify-end">
-          <Button type="primary" icon={<PlusCircleOutlined />}>
-            Lihat Stok lengkap
-          </Button>
+          <Button type="primary">Lihat Stok lengkap</Button>
         </div>
       </Card>
       <Divider />

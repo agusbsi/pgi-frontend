@@ -75,12 +75,12 @@ const Sidebar = () => {
             <Link to="/penjualan">Penjualan</Link>
           </Menu.Item>
           <Menu.Item key="8" icon={<ReconciliationOutlined />}>
-            <Link to="/retur">Packing</Link>
+            <Link to="/packing">Packing</Link>
           </Menu.Item>
-          <Menu.Item key="8" icon={<ReconciliationOutlined />}>
+          <Menu.Item key="9" icon={<ReconciliationOutlined />}>
             <Link to="/retur">Retur</Link>
           </Menu.Item>
-          <Menu.Item key="9" icon={<CheckCircleOutlined />}>
+          <Menu.Item key="10" icon={<CheckCircleOutlined />}>
             <Link to="/cek-garansi">Cek Garansi</Link>
           </Menu.Item>
         </Menu.ItemGroup>
