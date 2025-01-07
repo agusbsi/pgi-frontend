@@ -37,7 +37,7 @@ const Navbar = () => {
       </Menu.Item>
       <Menu.Divider />
       <Menu.Item key="2" icon={<LogoutOutlined />}>
-        Logout
+        <Link to="/">Logout</Link>
       </Menu.Item>
     </Menu>
   );
@@ -169,7 +169,7 @@ const Navbar = () => {
           </Menu.Item>
           <Menu.Divider />
           <Menu.Item key="2" icon={<LogoutOutlined />}>
-            Logout
+            <Link to="/">Logout</Link>
           </Menu.Item>
         </Menu>
       </Drawer>

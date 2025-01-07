@@ -25,6 +25,7 @@ const JualAdd = lazy(() => import("./pages/JualAdd"));
 const PackingPage = lazy(() => import("./pages/PackingPage"));
 const ReturPage = lazy(() => import("./pages/ReturPage"));
 const GaransiPage = lazy(() => import("./pages/GaransiPage"));
+const DashboardInvestor = lazy(() => import("./pages/DashboardInvestor"));
 const MainLayout = lazy(() => import("./layouts/MainLayout"));
 
 const App = () => {
@@ -203,6 +204,14 @@ const App = () => {
             element={
               <MainLayout>
                 <GaransiPage />
+              </MainLayout>
+            }
+          />
+          <Route
+            path="/mobile"
+            element={
+              <MainLayout>
+                <DashboardInvestor />
               </MainLayout>
             }
           />

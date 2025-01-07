@@ -13,12 +13,17 @@ const LoginPage = () => {
     setLoading(true);
     setTimeout(() => {
       const { username, password } = values;
+
       if (username === "admin" && password === "admin") {
         message.success("Login successful!");
-        navigate("/dashboard"); // Alihkan ke halaman dashboard
+        navigate("/dashboard"); // Alihkan ke halaman dashboard admin
+      } else if (username === "investor" && password === "investor") {
+        message.success("Login successful!");
+        navigate("/mobile"); // Alihkan ke halaman dashboard investor
       } else {
         message.error("Login failed! Invalid username or password.");
       }
+
       setLoading(false);
     }, 1000); // Simulasi delay loading
   };

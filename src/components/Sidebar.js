@@ -31,6 +31,9 @@ const Sidebar = () => {
         <Menu.Item key="1" icon={<DashboardOutlined />}>
           <Link to="/dashboard">Dashboard</Link>
         </Menu.Item>
+        <Menu.Item key="11" icon={<CheckCircleOutlined />}>
+          <Link to="/mobile">Dashboard Investor</Link>
+        </Menu.Item>
         <Menu.ItemGroup key="gro-m" title="Permodalan">
           <Menu.Item key="investor" icon={<AppstoreOutlined />}>
             <Link to="/investor">Investor</Link>
