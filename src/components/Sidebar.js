@@ -89,13 +89,13 @@ const Sidebar = () => {
         </Menu.ItemGroup>
         <Menu.ItemGroup key="gro-m" title="Laporan">
           <Menu.Item key="investor" icon={<AppstoreOutlined />}>
-            <Link to="/investor">Investor</Link>
+            <Link to="/investor">Penjualan</Link>
+          </Menu.Item>
+          <Menu.Item key="investor" icon={<AppstoreOutlined />}>
+            <Link to="/investor">per Investor</Link>
           </Menu.Item>
           <Menu.Item key="proyek" icon={<TeamOutlined />}>
-            <Link to="/proyek">Kas Besar</Link>
-          </Menu.Item>
-          <Menu.Item key="proyek" icon={<TeamOutlined />}>
-            <Link to="/proyek">Neraca</Link>
+            <Link to="/proyek">per Proyek</Link>
           </Menu.Item>
         </Menu.ItemGroup>
       </Menu>
