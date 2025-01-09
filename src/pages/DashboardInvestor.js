@@ -43,7 +43,7 @@ const DashboardInvestor = () => {
           <Col>
             <Text className="text-white">Total Balance</Text>
             <Title level={2} style={{ color: "#fff", margin: 0 }}>
-              Rp.450,000,000
+              Rp.300,000,000
             </Title>
           </Col>
           <Col>
@@ -90,7 +90,7 @@ const DashboardInvestor = () => {
                     margin: 0,
                   }}
                 >
-                  Modal di setor
+                  Total Proyek
                 </Typography.Title>
                 <Typography.Text
                   style={{
@@ -98,7 +98,7 @@ const DashboardInvestor = () => {
                     fontSize: "14px",
                   }}
                 >
-                  Rp. 350,000,000
+                   Rp. 100,000,000 ( 2 Proyek )
                 </Typography.Text>
               </Col>
               <Col>
@@ -125,7 +125,7 @@ const DashboardInvestor = () => {
                     margin: 0,
                   }}
                 >
-                  Keuntungan
+                  Pinjaman
                 </Typography.Title>
                 <Typography.Text
                   style={{
@@ -146,7 +146,7 @@ const DashboardInvestor = () => {
 
       {/* Proyek Aktif */}
       <Card
-        title="Proyek anda"
+        title="Proyek yang anda ikuti"
         style={{ borderRadius: "12px" }}
         className="mb-3"
       >
@@ -163,7 +163,9 @@ const DashboardInvestor = () => {
             <Text type="secondary">50 Lembar saham</Text>
           </Col>
           <Col>
-            <Text style={{ color: "#34c38f" }}>+Rp. 50,000,000</Text>
+          <Button color="primary" variant="filled">
+              Detail
+            </Button>
           </Col>
         </Row>
         <Divider />
@@ -180,7 +182,9 @@ const DashboardInvestor = () => {
             <Text type="secondary">50 Lembar saham</Text>
           </Col>
           <Col>
-            <Text style={{ color: "#34c38f" }}>+Rp. 50,000,000</Text>
+          <Button color="primary" variant="filled">
+              Detail
+            </Button>
           </Col>
         </Row>
       </Card>
