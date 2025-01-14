@@ -4,28 +4,32 @@ import { Spin } from "antd";
 import "antd/dist/reset.css"; // Ant Design CSS
 
 // Lazy-loaded pages
-const LoginPage = lazy(() => import("./pages/LoginPage"));
-const DashboardPage = lazy(() => import("./pages/DashboardPage"));
-const InvestorPage = lazy(() => import("./pages/InvestorPage"));
-const ProyekPage = lazy(() => import("./pages/ProyekPage"));
-const ProyekDetail = lazy(() => import("./pages/ProyekDetail"));
-const BarangPage = lazy(() => import("./pages/BarangPage"));
-const UserPage = lazy(() => import("./pages/UserPage"));
-const SupplierPage = lazy(() => import("./pages/SupplierPage"));
-const PelangganPage = lazy(() => import("./pages/PelangganPage"));
-const BeliPage = lazy(() => import("./pages/BeliPage"));
-const BeliAdd = lazy(() => import("./pages/BeliAdd"));
-const BeliDetail = lazy(() => import("./pages/BeliDetail"));
-const TerimaPage = lazy(() => import("./pages/TerimaPage"));
-const TerimaDetail = lazy(() => import("./pages/TerimaDetail"));
-const OperasionalPage = lazy(() => import("./pages/OperasionalPage"));
-const JualPage = lazy(() => import("./pages/JualPage"));
-const JualDetail = lazy(() => import("./pages/JualDetail"));
-const JualAdd = lazy(() => import("./pages/JualAdd"));
-const PackingPage = lazy(() => import("./pages/PackingPage"));
-const ReturPage = lazy(() => import("./pages/ReturPage"));
-const GaransiPage = lazy(() => import("./pages/GaransiPage"));
-const DashboardInvestor = lazy(() => import("./pages/DashboardInvestor"));
+const LoginPage = lazy(() => import("./pages/mypanel/LoginPage"));
+const DashboardPage = lazy(() => import("./pages/mypanel/DashboardPage"));
+const InvestorPage = lazy(() => import("./pages/mypanel/InvestorPage"));
+const ProyekPage = lazy(() => import("./pages/mypanel/ProyekPage"));
+const ProyekDetail = lazy(() => import("./pages/mypanel/ProyekDetail"));
+const BarangPage = lazy(() => import("./pages/mypanel/BarangPage"));
+const UserPage = lazy(() => import("./pages/mypanel/UserPage"));
+const SupplierPage = lazy(() => import("./pages/mypanel/SupplierPage"));
+const PelangganPage = lazy(() => import("./pages/mypanel/PelangganPage"));
+const BeliPage = lazy(() => import("./pages/mypanel/BeliPage"));
+const BeliAdd = lazy(() => import("./pages/mypanel/BeliAdd"));
+const BeliDetail = lazy(() => import("./pages/mypanel/BeliDetail"));
+const TerimaPage = lazy(() => import("./pages/mypanel/TerimaPage"));
+const TerimaDetail = lazy(() => import("./pages/mypanel/TerimaDetail"));
+const OperasionalPage = lazy(() => import("./pages/mypanel/OperasionalPage"));
+const JualPage = lazy(() => import("./pages/mypanel/JualPage"));
+const JualDetail = lazy(() => import("./pages/mypanel/JualDetail"));
+const JualAdd = lazy(() => import("./pages/mypanel/JualAdd"));
+const PackingPage = lazy(() => import("./pages/mypanel/PackingPage"));
+const PackingDetail = lazy(() => import("./pages/mypanel/PackingDetail"));
+const ReturPage = lazy(() => import("./pages/mypanel/ReturPage"));
+const GaransiPage = lazy(() => import("./pages/mypanel/GaransiPage"));
+const DashboardInvestor = lazy(() => import("./pages/investor/Dashboard"));
+const DetailProyekInvestor = lazy(() =>
+  import("./pages/investor/ProyekDetail")
+);
 const MainLayout = lazy(() => import("./layouts/MainLayout"));
 
 const App = () => {
@@ -192,6 +196,14 @@ const App = () => {
             }
           />
           <Route
+            path="/packing/:id"
+            element={
+              <MainLayout>
+                <PackingDetail />
+              </MainLayout>
+            }
+          />
+          <Route
             path="/retur"
             element={
               <MainLayout>
@@ -212,6 +224,14 @@ const App = () => {
             element={
               <MainLayout>
                 <DashboardInvestor />
+              </MainLayout>
+            }
+          />
+          <Route
+            path="/detail-proyek-investor/:id"
+            element={
+              <MainLayout>
+                <DetailProyekInvestor />
               </MainLayout>
             }
           />

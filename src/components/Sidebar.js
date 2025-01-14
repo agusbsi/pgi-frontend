@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { Layout, Menu } from "antd";
 import {
   DashboardOutlined,
-  AppstoreOutlined,
   TeamOutlined,
   ShopOutlined,
   ShoppingOutlined,
@@ -11,6 +10,14 @@ import {
   ReconciliationOutlined,
   CheckCircleOutlined,
   ProductOutlined,
+  ControlOutlined,
+  UsergroupAddOutlined,
+  CloudDownloadOutlined,
+  CloudUploadOutlined,
+  RetweetOutlined,
+  BuildOutlined,
+  FileDoneOutlined,
+  SettingOutlined,
 } from "@ant-design/icons";
 
 const { Sider } = Layout;
@@ -35,10 +42,10 @@ const Sidebar = () => {
           <Link to="/mobile">Dashboard Investor</Link>
         </Menu.Item>
         <Menu.ItemGroup key="gro-m" title="Permodalan">
-          <Menu.Item key="investor" icon={<AppstoreOutlined />}>
+          <Menu.Item key="investor" icon={<TeamOutlined />}>
             <Link to="/investor">Investor</Link>
           </Menu.Item>
-          <Menu.Item key="proyek" icon={<TeamOutlined />}>
+          <Menu.Item key="proyek" icon={<ControlOutlined />}>
             <Link to="/proyek">Proyek</Link>
           </Menu.Item>
         </Menu.ItemGroup>
@@ -46,7 +53,7 @@ const Sidebar = () => {
           <Menu.Item key="2" icon={<ProductOutlined />}>
             <Link to="/barang">Stok Barang</Link>
           </Menu.Item>
-          <Menu.Item key="3" icon={<TeamOutlined />}>
+          <Menu.Item key="3" icon={<UsergroupAddOutlined />}>
             <Link to="/user">User</Link>
           </Menu.Item>
           <Menu.Item key="4" icon={<ShopOutlined />}>
@@ -57,7 +64,11 @@ const Sidebar = () => {
           </Menu.Item>
         </Menu.ItemGroup>
         <Menu.ItemGroup key="grp" title="Menu Utama">
-          <SubMenu key="6" icon={<ShoppingCartOutlined />} title="Barang Masuk">
+          <SubMenu
+            key="6"
+            icon={<CloudDownloadOutlined />}
+            title="Barang Masuk"
+          >
             <Menu.Item key="6-1" icon={<ReconciliationOutlined />}>
               <Link to="/pembelian">Pembelian</Link>
             </Menu.Item>
@@ -67,7 +78,7 @@ const Sidebar = () => {
           </SubMenu>
           <SubMenu
             key="10"
-            icon={<ShoppingCartOutlined />}
+            icon={<CloudUploadOutlined />}
             title="Barang Keluar"
           >
             <Menu.Item key="10-1" icon={<ReconciliationOutlined />}>
@@ -77,24 +88,29 @@ const Sidebar = () => {
           <Menu.Item key="7" icon={<ShoppingCartOutlined />}>
             <Link to="/penjualan">Penjualan</Link>
           </Menu.Item>
-          <Menu.Item key="8" icon={<ReconciliationOutlined />}>
+          <Menu.Item key="8" icon={<BuildOutlined />}>
             <Link to="/packing">Packing</Link>
           </Menu.Item>
-          <Menu.Item key="9" icon={<ReconciliationOutlined />}>
+          <Menu.Item key="9" icon={<RetweetOutlined />}>
             <Link to="/retur">Retur</Link>
           </Menu.Item>
           <Menu.Item key="10" icon={<CheckCircleOutlined />}>
             <Link to="/cek-garansi">Cek Garansi</Link>
           </Menu.Item>
         </Menu.ItemGroup>
+        <Menu.ItemGroup key="setting" title="Pengaturan">
+          <Menu.Item key="investor" icon={<SettingOutlined />}>
+            <Link to="/investor">Pengaturan Umum</Link>
+          </Menu.Item>
+        </Menu.ItemGroup>
         <Menu.ItemGroup key="gro-m" title="Laporan">
-          <Menu.Item key="investor" icon={<AppstoreOutlined />}>
+          <Menu.Item key="investor" icon={<FileDoneOutlined />}>
             <Link to="/investor">Penjualan</Link>
           </Menu.Item>
-          <Menu.Item key="investor" icon={<AppstoreOutlined />}>
+          <Menu.Item key="investor" icon={<FileDoneOutlined />}>
             <Link to="/investor">per Investor</Link>
           </Menu.Item>
-          <Menu.Item key="proyek" icon={<TeamOutlined />}>
+          <Menu.Item key="proyek" icon={<FileDoneOutlined />}>
             <Link to="/proyek">per Proyek</Link>
           </Menu.Item>
         </Menu.ItemGroup>
