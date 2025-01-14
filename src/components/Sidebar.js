@@ -91,6 +91,9 @@ const Sidebar = () => {
           <Menu.Item key="8" icon={<BuildOutlined />}>
             <Link to="/packing">Packing</Link>
           </Menu.Item>
+          <Menu.Item key="8" icon={<BuildOutlined />}>
+            <Link to="/packing">Piutang</Link>
+          </Menu.Item>
           <Menu.Item key="9" icon={<RetweetOutlined />}>
             <Link to="/retur">Retur</Link>
           </Menu.Item>

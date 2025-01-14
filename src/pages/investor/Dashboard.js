@@ -262,9 +262,9 @@ const DashboardInvestor = () => {
             <Text type="secondary">Proyek : 146194691</Text>
           </div>
           <div>
-          <Text className="font-bold">Rp. 350,000</Text>
+          <Text className="font-bold">100 Pcs</Text>
             <br />
-            <Text type="secondary">67 Pcs</Text>
+            <Text type="secondary">01 Jan 2025</Text>
           </div>
         </Row>
         <Row
@@ -278,9 +278,9 @@ const DashboardInvestor = () => {
             <Text type="secondary">Proyek : 146194691</Text>
           </div>
           <div>
-          <Text className="font-bold">Rp. 350,000</Text>
+          <Text className="font-bold">100 Pcs</Text>
             <br />
-            <Text type="secondary">67 Pcs</Text>
+            <Text type="secondary"> 02 Jan 2025</Text>
           </div>
         </Row>
       </Card>

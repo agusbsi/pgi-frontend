@@ -316,7 +316,15 @@ const JualAdd = () => {
           </div>
 
           <Divider />
+          <div className="flex justify-between">
           <p className="font-black">List Barang:</p>
+          <Space>
+            <Button type="primary" onClick={() => setIsModalOpen(true)}>
+              Tambah Barang
+            </Button>
+          </Space>
+          </div>
+         
           <Table
             columns={columns}
             dataSource={barangList}
@@ -332,18 +340,10 @@ const JualAdd = () => {
                   <strong>{calculateTotalQuantity()}</strong>
                 </Table.Summary.Cell>
                 <Table.Summary.Cell></Table.Summary.Cell>
-                <Table.Summary.Cell>
-                  <strong>{formatRupiah(calculateGrandTotal())}</strong>
-                </Table.Summary.Cell>
-                <Table.Summary.Cell></Table.Summary.Cell>
               </Table.Summary.Row>
             )}
           />
-          <Space>
-            <Button type="primary" onClick={() => setIsModalOpen(true)}>
-              Tambah Barang
-            </Button>
-          </Space>
+         
           <Divider />
           <Space className="flex justify-end mt-3">
             <Button type="primary" htmlType="submit">
