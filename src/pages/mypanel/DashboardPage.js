@@ -1,14 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Breadcrumb, Card, Skeleton } from "antd";
-import {
-  ResponsiveContainer,
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  Tooltip,
-  CartesianGrid,
-} from "recharts";
+import { Breadcrumb} from "antd";
 import {
   HomeOutlined,
   DashboardOutlined,
@@ -93,14 +84,6 @@ const Dashboard = () => {
     },
   ];
 
-  // Data dummy untuk grafik realtime
-  const realtimeData = [
-    { time: "10:00", barang: 50, transaksi: 100 },
-    { time: "10:01", barang: 52, transaksi: 110 },
-    { time: "10:02", barang: 53, transaksi: 115 },
-    { time: "10:03", barang: 54, transaksi: 120 },
-    { time: "10:04", barang: 55, transaksi: 125 },
-  ];
 
   // Simulasi pengambilan data
   useEffect(() => {
@@ -152,30 +135,6 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Realtime Data Chart */}
-      <Card
-        title="Grafik Data Transaksi"
-        bordered={false}
-        style={{
-          marginBottom: 24,
-          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-        }}
-      >
-        {loading ? (
-          <Skeleton active paragraph={{ rows: 8 }} />
-        ) : (
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={realtimeData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="time" />
-              <YAxis />
-              <Tooltip />
-              <Line type="monotone" dataKey="barang" stroke="#8884d8" />
-              <Line type="monotone" dataKey="transaksi" stroke="#82ca9d" />
-            </LineChart>
-          </ResponsiveContainer>
-        )}
-      </Card>
     </>
   );
 };

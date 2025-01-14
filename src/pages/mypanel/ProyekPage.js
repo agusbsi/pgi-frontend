@@ -302,7 +302,7 @@ const ProyekPage = () => {
 
           <Form.Item
             name="modal"
-            label="Modal"
+            label="Target Modal"
             rules={[{ required: true, message: "Harap masukkan modal!" }]}
           >
             <InputNumber

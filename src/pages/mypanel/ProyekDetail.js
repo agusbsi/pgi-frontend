@@ -19,9 +19,7 @@ import {
   Modal,
   Select,
   Input,
-  InputNumber,
-  DatePicker,
-  Form,
+  Form,Radio
 } from "antd";
 import {
   LeftCircleOutlined,
@@ -345,6 +343,7 @@ const ProyekPage = () => {
 
   const steps = [
     "Pengumpulan Modal",
+    "Proyek Dimulai",
     "Pembelian Barang (Import)",
     "Penerimaan Barang",
     "Penjualan Barang",
@@ -360,7 +359,7 @@ const ProyekPage = () => {
     }
   };
   const [isModal, setIsModa] = useState(false);
-  const [form] = Form.useForm();
+  
 
   const handleOpenModal = () => {
     setIsModa(true);
@@ -376,6 +375,20 @@ const ProyekPage = () => {
     // Lakukan sesuatu dengan data, misalnya mengirim ke backend
     setIsModalOpen(false);
     form.resetFields();
+  };
+  const [form] = Form.useForm();
+  const [isNewInvestor, setIsNewInvestor] = useState(true); // Menyimpan apakah investor baru atau lama
+
+  // Contoh data investor lama (bisa diambil dari API atau database)
+  const investorLamaOptions = [
+    { id: 1, name: 'Investor 1' },
+    { id: 2, name: 'Investor 2' },
+    { id: 3, name: 'Investor 3' },
+  ];
+
+  const handleInvestorChange = (e) => {
+    setIsNewInvestor(e.target.value === 'baru');
+    form.resetFields(); // Reset form fields ketika tipe investor berubah
   };
   return (
     <div className="mt-3">
@@ -464,7 +477,8 @@ const ProyekPage = () => {
                 .filter(
                   (step, index) =>
                     step === "Pembagian Dana Investor" ||
-                    step === "Proyek Selesai"
+                    step === "Proyek Selesai" ||
+                    step === "Proyek Dimulai"
                 )
                 .map((step, index) => (
                   <Select.Option key={index} value={steps.indexOf(step)}>
@@ -643,74 +657,101 @@ const ProyekPage = () => {
         </div>
       </div>
       <Modal
-        title="Tambah Data Investor"
-        open={isModal}
-        onCancel={handleCancel}
-        footer={[
-          <Button key="cancel" onClick={handleCancel}>
-            Batal
-          </Button>,
-          <Button key="submit" type="primary" onClick={() => form.submit()}>
-            Simpan
-          </Button>,
-        ]}
+      title="Tambah Data Investor"
+      open={isModal}
+      onCancel={handleCancel}
+      footer={[
+        <Button key="cancel" onClick={handleCancel}>
+          Batal
+        </Button>,
+        <Button key="submit" type="primary" onClick={() => form.submit()}>
+          Simpan
+        </Button>,
+      ]}
+    >
+      <Form
+        form={form}
+        layout="vertical"
+        onFinish={handleFinish}
+        initialValues={{
+          hargaLembar: 1000000,
+        }}
       >
-        <Form
-          form={form}
-          layout="vertical"
-          onFinish={handleFinish}
-          initialValues={{
-            hargaLembar: 1000000,
-          }}
-        >
+        {/* Pilihan Investor Lama atau Baru */}
+        <Form.Item label="Jenis Investor" name="jenisInvestor" rules={[{ required: true, message: 'Harap pilih jenis investor' }]}>
+          <Radio.Group onChange={handleInvestorChange} defaultValue="baru">
+            <Radio value="baru">Investor Baru</Radio>
+            <Radio value="lama">Investor Lama</Radio>
+          </Radio.Group>
+        </Form.Item>
+
+        {/* Input untuk investor baru */}
+        {isNewInvestor && (
+          <>
+            <Form.Item
+              label="Nomor Kontrak"
+              name="kontrak"
+              rules={[{ required: true, message: 'Harap masukkan nomor kontrak' }]}
+            >
+              <Input placeholder="Contoh: PGI/KI-001/01-2025" />
+            </Form.Item>
+            <Form.Item
+              label="Nama Investor"
+              name="investor"
+              rules={[{ required: true, message: 'Harap masukkan nama investor' }]}
+            >
+              <Input placeholder="Nama lengkap investor" />
+            </Form.Item>
+            <Form.Item
+              label="NIK"
+              name="nik"
+              rules={[{ required: true, message: 'Harap masukkan NIK' }]}
+            >
+              <Input placeholder="Masukkan NIK" />
+            </Form.Item>
+            <Form.Item
+              label="NPWP"
+              name="npwp"
+              rules={[{ required: true, message: 'Harap masukkan NPWP' }]}
+            >
+              <Input placeholder="Masukkan NPWP" />
+            </Form.Item>
+           
+            <Form.Item
+              label="Alamat"
+              name="alamat"
+              rules={[{ required: true, message: 'Harap masukkan alamat' }]}
+            >
+              <Input.TextArea rows={3} placeholder="Alamat lengkap" />
+            </Form.Item>
+          </>
+        )}
+
+        {/* Dropdown untuk memilih investor lama */}
+        {!isNewInvestor && (
           <Form.Item
-            label="Nomor Kontrak"
-            name="kontrak"
-            rules={[
-              { required: true, message: "Harap masukkan nomor kontrak" },
-            ]}
+            label="Pilih Investor Lama"
+            name="investorLama"
+            rules={[{ required: true, message: 'Harap pilih investor lama' }]}
           >
-            <Input placeholder="Contoh: PGI/KI-001/01-2025" />
+            <Select placeholder="Pilih investor lama">
+              {investorLamaOptions.map((investor) => (
+                <Select.Option key={investor.id} value={investor.id}>
+                  {investor.name}
+                </Select.Option>
+              ))}
+            </Select>
           </Form.Item>
-          <Form.Item
-            label="Nama Investor"
-            name="investor"
-            rules={[
-              { required: true, message: "Harap masukkan nama investor" },
-            ]}
-          >
-            <Input placeholder="Nama lengkap investor" />
-          </Form.Item>
-          <Form.Item
-            label="NIK"
-            name="nik"
-            rules={[{ required: true, message: "Harap masukkan NIK" }]}
-          >
-            <Input placeholder="Masukkan NIK" />
-          </Form.Item>
-          <Form.Item
-            label="NPWP"
-            name="npwp"
-            rules={[{ required: true, message: "Harap masukkan NPWP" }]}
-          >
-            <Input placeholder="Masukkan NPWP" />
-          </Form.Item>
-          <Form.Item
-            label="Jumlah Saham"
-            name="saham"
-            rules={[{ required: true, message: "Harap masukkan jumlah saham" }]}
-          >
-            <Input placeholder="Contoh: 50 Lembar" />
-          </Form.Item>
-          <Form.Item
-            label="Alamat"
-            name="alamat"
-            rules={[{ required: true, message: "Harap masukkan alamat" }]}
-          >
-            <Input.TextArea rows={3} placeholder="Alamat lengkap" />
-          </Form.Item>
-        </Form>
-      </Modal>
+        )}
+         <Form.Item
+              label="Jumlah Saham"
+              name="saham"
+              rules={[{ required: true, message: 'Harap masukkan jumlah saham' }]}
+            >
+              <Input placeholder="Contoh: 50 Lembar" />
+            </Form.Item>
+      </Form>
+    </Modal>
     </div>
   );
 };

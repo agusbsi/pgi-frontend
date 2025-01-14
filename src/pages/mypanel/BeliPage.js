@@ -10,7 +10,7 @@ import {
   Tooltip,
   Button,
   Dropdown,
-  Menu,
+  Menu,Modal,Form,InputNumber,Select,Divider
 } from "antd";
 import {
   PlusCircleOutlined,
@@ -23,6 +23,7 @@ import {
 
 const { Title } = Typography;
 const { Search } = Input;
+const { Option } = Select;
 
 const BeliPage = () => {
   const [data, setData] = useState([
@@ -88,8 +89,18 @@ const BeliPage = () => {
     },
     {
       title: "Tanggal",
-      dataIndex: "tgl",
       key: "tgl",
+      render : (text, record) => (
+        <>
+         <span className="text-xs text-gray-600">
+            Dibuat : {record.tgl}
+          </span>
+          <br/>
+         <span className="text-xs text-gray-600">
+            Update : {record.tgl}
+          </span>
+        </>
+      ),
     },
     {
       title: "Status",
@@ -114,7 +125,7 @@ const BeliPage = () => {
         <Link to={`/pembelian/${record.key}`}>Detail</Link>
       </Menu.Item>
       <Menu.Item key="edit" icon={<EditOutlined />}>
-        Edit
+        Update
       </Menu.Item>
       <Menu.Item key="delete" icon={<DeleteOutlined />}>
         Hapus
@@ -129,6 +140,73 @@ const BeliPage = () => {
     setData(filteredData);
   };
 
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleOk = () => {
+    // Form submit logic here
+    console.log("Data Pembelian Ditambahkan");
+    setIsModalVisible(false);
+  };
+
+  const [form] = Form.useForm();
+  const [total, setTotal] = useState(0);
+  const [hpp, setHpp] = useState(0);
+
+  const handleQuantityChange = (value) => {
+    const productPrice = form.getFieldValue('productPrice');
+    if (productPrice && value) {
+      const calculatedTotal = productPrice * value;
+      setTotal(calculatedTotal);
+      form.setFieldsValue({ total: calculatedTotal });
+
+      // Set HPP based on total, adjust if necessary based on other costs
+      const customsCost = form.getFieldValue('customsCost') || 0;
+      const shippingCost = form.getFieldValue('shippingCost') || 0;
+      const otherCost = form.getFieldValue('otherCost') || 0;
+      const calculatedHpp = calculatedTotal + customsCost + shippingCost + otherCost;
+      setHpp(calculatedHpp);
+      form.setFieldsValue({ hpp: calculatedHpp });
+    }
+  };
+
+  const handlePriceChange = (value) => {
+    const quantity = form.getFieldValue('quantity');
+    if (quantity && value) {
+      const calculatedTotal = value * quantity;
+      setTotal(calculatedTotal);
+      form.setFieldsValue({ total: calculatedTotal });
+
+      // Update HPP as well
+      const customsCost = form.getFieldValue('customsCost') || 0;
+      const shippingCost = form.getFieldValue('shippingCost') || 0;
+      const otherCost = form.getFieldValue('otherCost') || 0;
+      const calculatedHpp = calculatedTotal + customsCost + shippingCost + otherCost;
+      setHpp(calculatedHpp);
+      form.setFieldsValue({ hpp: calculatedHpp });
+    }
+  };
+
+  const handleCostChange = () => {
+    const quantity = form.getFieldValue('quantity');
+    const price = form.getFieldValue('productPrice');
+
+    // Recalculate HPP based on the current costs
+    const customsCost = form.getFieldValue('customsCost') || 0;
+    const shippingCost = form.getFieldValue('shippingCost') || 0;
+    const otherCost = form.getFieldValue('otherCost') || 0;
+    const calculatedHpp = price + (customsCost/quantity) + (shippingCost/quantity) + (otherCost/quantity);
+    setHpp(calculatedHpp);
+    form.setFieldsValue({ hpp: calculatedHpp });
+  };
+
   return (
     <div>
       <Row
@@ -140,11 +218,9 @@ const BeliPage = () => {
       >
         <Title level={2}>Pembelian</Title>
         <Tooltip title="Pembelian Baru">
-          <Link to="/pembelian/add">
-            <Button type="primary" icon={<PlusCircleOutlined />}>
+            <Button type="primary" icon={<PlusCircleOutlined />} onClick={showModal}>
               Tambah Pembelian
             </Button>
-          </Link>
         </Tooltip>
       </Row>
       <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
@@ -274,6 +350,181 @@ const BeliPage = () => {
           }}
         />
       </div>
+      <Modal
+      title="Tambah Data Pembelian"
+      open={isModalVisible}
+      onCancel={handleCancel}
+      footer={null}
+      width={1000}
+    >
+      <Form
+        form={form}
+        layout="vertical"
+        onFinish={handleOk}
+      >
+        <Row gutter={24}>
+          <Col span={8}>
+            <Form.Item
+              label="Nomor"
+              name="nomor"
+              initialValue="PYK-2024/XI/120"
+            >
+              <Input disabled />
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item
+              label="Proyek"
+              name="proyek"
+              rules={[{ required: true, message: 'Proyek harus dipilih' }]}
+            >
+              <Select placeholder="Pilih Proyek">
+                <Option value="proyek1">Proyek 1</Option>
+                <Option value="proyek2">Proyek 2</Option>
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item
+              label="Supplier"
+              name="supplier"
+              rules={[{ required: true, message: 'Supplier harus dipilih' }]}
+            >
+              <Select placeholder="Pilih Supplier">
+                <Option value="supplier1">Supplier 1</Option>
+                <Option value="supplier2">Supplier 2</Option>
+              </Select>
+            </Form.Item>
+          </Col>
+        </Row>
+
+        <Row gutter={24}>
+          <Col span={8}>
+            <Form.Item label="Resi Agen" name="resi" rules={[{ required: true, message: 'Resi agen harus diisi' }]}>
+              <Input />
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item label="Nomor Invoice" name="invoice" rules={[{ required: true, message: 'Nomor invoice harus diisi' }]}>
+              <Input />
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item label="Shipping Mark" name="shiping" rules={[{ required: true, message: 'Shipping mark harus diisi' }]}>
+              <Input />
+            </Form.Item>
+          </Col>
+        </Row>
+
+        <Divider orientation="left" plain>
+          Data Barang
+        </Divider>
+
+        <Row gutter={24}>
+          <Col span={12}>
+            <Form.Item label="Nama Barang" name="barang" rules={[{ required: true, message: 'Nama barang harus dipilih' }]}>
+              <Select placeholder="Pilih Barang">
+                <Option value="barang1">Barang 1</Option>
+                <Option value="barang2">Barang 2</Option>
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col span={4}>
+            <Form.Item
+              label="Qty"
+              name="quantity"
+              rules={[{ required: true, message: 'Qty harus diisi' }]}
+            >
+              <InputNumber
+                min={1}
+                style={{ width: '100%' }}
+                onChange={handleQuantityChange}
+              />
+            </Form.Item>
+          </Col>
+          <Col span={4}>
+            <Form.Item
+              label="Harga Beli"
+              name="productPrice"
+              rules={[{ required: true, message: 'Harga barang harus diisi' }]}
+            >
+              <InputNumber
+                min={1}
+                style={{ width: '100%' }}
+                onChange={handlePriceChange}
+              />
+            </Form.Item>
+          </Col>
+          <Col span={4}>
+            <Form.Item label="Total" name="total" initialValue={total}>
+              <Input value={total} disabled />
+            </Form.Item>
+          </Col>
+        </Row>
+
+        <Divider orientation="left" plain>
+          Data Biaya
+        </Divider>
+        <Row gutter={24}>
+          <Col span={8}>
+            <Form.Item label="Biaya Cukai" name="customsCost" onChange={handleCostChange}>
+              <InputNumber min={0} style={{ width: '100%' }} />
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item label="Biaya Kirim" name="shippingCost" onChange={handleCostChange}>
+              <InputNumber min={0} style={{ width: '100%' }} />
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item label="Biaya Lain-lain" name="otherCost" onChange={handleCostChange}>
+              <InputNumber min={0} style={{ width: '100%' }} />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Divider orientation="left" plain>
+          Estimasi Penjualan per barang
+        </Divider>
+
+        <Row gutter={24}>
+          <Col span={6}>
+          <Form.Item label="Hpp" name="hpp" initialValue={total}>
+              <Input value={total} disabled />
+            </Form.Item>
+          </Col>
+          <Col span={6}>
+            <Form.Item label="Profit Ecer" name="ecer">
+              <InputNumber min={0} style={{ width: '100%' }} />
+            </Form.Item>
+          </Col>
+          <Col span={6}>
+            <Form.Item label="Profit Grosir 1" name="grosir1">
+              <InputNumber min={0} style={{ width: '100%' }} />
+            </Form.Item>
+          </Col>
+          <Col span={6}>
+            <Form.Item label="Profit Grosir 2" name="grosir2">
+              <InputNumber min={0} style={{ width: '100%' }} />
+            </Form.Item>
+          </Col>
+        </Row>
+
+        <Form.Item label="Keterangan" name="notes">
+          <Input.TextArea rows={4} />
+        </Form.Item>
+
+        <Row justify="end">
+          <Col>
+            <Button onClick={handleCancel} style={{ marginRight: 8 }}>
+              Batal
+            </Button>
+            <Button type="primary" htmlType="submit">
+              Simpan
+            </Button>
+          </Col>
+        </Row>
+      </Form>
+    </Modal>
     </div>
   );
 };

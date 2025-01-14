@@ -15,22 +15,6 @@ const TerimaDetail = () => {
       satuan_pertama: "pcs",
       jumlah: 10,
     },
-    {
-      deskripsi: "Modem ZTE MiFi",
-      tipe: "MF920",
-      merk: "ZTE",
-      barcode: "3456789012345",
-      satuan_pertama: "pcs",
-      jumlah: 10,
-    },
-    {
-      deskripsi: "Modem Alcatel LinkZone",
-      tipe: "MW40",
-      merk: "Alcatel",
-      barcode: "4567890123456",
-      satuan_pertama: "pcs",
-      jumlah: 10,
-    },
   ];
 
   const columns = [
@@ -67,9 +51,7 @@ const TerimaDetail = () => {
     },
   ];
 
-  const calculateTotalQuantity = () => {
-    return barangList.reduce((total, item) => total + item.jumlah, 0);
-  };
+
 
   return (
     <div className="mt-3">
@@ -114,17 +96,7 @@ const TerimaDetail = () => {
           pagination={false}
           rowKey={(record) => record.key}
           style={{ marginBottom: "16px" }}
-          summary={() => (
-            <Table.Summary.Row>
-              <Table.Summary.Cell colSpan={4} align="right">
-                <strong>Total</strong>
-              </Table.Summary.Cell>
-              <Table.Summary.Cell>
-                <strong>{calculateTotalQuantity()}</strong>
-              </Table.Summary.Cell>
-              <Table.Summary.Cell></Table.Summary.Cell>
-            </Table.Summary.Row>
-          )}
+          
         />
       </Card>
     </div>
