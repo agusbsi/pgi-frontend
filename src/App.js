@@ -27,6 +27,7 @@ const PackingDetail = lazy(() => import("./pages/mypanel/PackingDetail"));
 const ReturPage = lazy(() => import("./pages/mypanel/ReturPage"));
 const GaransiPage = lazy(() => import("./pages/mypanel/GaransiPage"));
 const DashboardInvestor = lazy(() => import("./pages/investor/Dashboard"));
+const AccountPage = lazy(() => import("./pages/mypanel/AccountPage"));
 const DetailProyekInvestor = lazy(() =>
   import("./pages/investor/ProyekDetail")
 );
@@ -232,6 +233,14 @@ const App = () => {
             element={
               <MainLayout>
                 <DetailProyekInvestor />
+              </MainLayout>
+            }
+          />
+          <Route
+            path="/akun"
+            element={
+              <MainLayout>
+                <AccountPage />
               </MainLayout>
             }
           />

@@ -245,6 +245,45 @@ const DashboardInvestor = () => {
           </Col>
         </Row>
       </Card>
+      <Card
+        title="5 Transaksi terbaru"
+        extra={<a href="#">Lebih lengkap</a>}
+        style={{ borderRadius: "12px" }}
+        className="mb-3"
+      >
+        <Row
+          justify="space-between"
+          align="middle"
+          className="bg-blue-50 p-2 rounded-md mb-1"
+        >
+          <div>
+            <Text className="font-bold">PJ-84168164</Text>
+            <br />
+            <Text type="secondary">Proyek : 146194691</Text>
+          </div>
+          <div>
+          <Text className="font-bold">Rp. 350,000</Text>
+            <br />
+            <Text type="secondary">67 Pcs</Text>
+          </div>
+        </Row>
+        <Row
+          justify="space-between"
+          align="middle"
+          className="bg-blue-50 p-2 rounded-md mb-1"
+        >
+          <div>
+            <Text className="font-bold">PJ-84168164</Text>
+            <br />
+            <Text type="secondary">Proyek : 146194691</Text>
+          </div>
+          <div>
+          <Text className="font-bold">Rp. 350,000</Text>
+            <br />
+            <Text type="secondary">67 Pcs</Text>
+          </div>
+        </Row>
+      </Card>
 
       {/* Footer Navigation */}
       <Row

@@ -33,7 +33,7 @@ const Navbar = () => {
   const menu = (
     <Menu>
       <Menu.Item key="1" icon={<SettingOutlined />}>
-        Akun
+      <Link to="/akun">Akun</Link>
       </Menu.Item>
       <Menu.Divider />
       <Menu.Item key="2" icon={<LogoutOutlined />}>

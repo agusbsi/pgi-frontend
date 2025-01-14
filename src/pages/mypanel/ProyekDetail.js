@@ -55,7 +55,8 @@ const ProyekPage = () => {
       saham: "50 Lembar",
       hargaLembar: 1000000,
       modal: 50000000,
-      tanggal: "02 Januari 2024",
+      tanggalMulai: "02 Januari 2024",
+      tanggalAkhir: "02 Juni 2024",
       alamat: "Jln. Parastembok Jambewangi, Sempu, Banyuwangi",
     },
     {
@@ -68,8 +69,9 @@ const ProyekPage = () => {
       npwp: "91569159824925",
       saham: "240 Lembar",
       hargaLembar: 1000000,
-      modal: 240000000,
-      tanggal: "02 Januari 2024",
+      modal: 169000000,
+      tanggalMulai: "02 Januari 2024",
+      tanggalAkhir: "02 Juni 2024",
       alamat: "Jln. Parastembok Jambewangi, Sempu, Banyuwangi",
     },
     {
@@ -82,8 +84,9 @@ const ProyekPage = () => {
       npwp: "-",
       saham: "150 Lembar",
       hargaLembar: 1000000,
-      modal: 150000000,
-      tanggal: "02 Januari 2024",
+      modal: 210000000,
+      tanggalMulai: "02 Januari 2024",
+      tanggalAkhir: "02 Juni 2024",
       alamat: "Jln. Parastembok Jambewangi, Sempu, Banyuwangi",
     },
   ]);
@@ -113,8 +116,8 @@ const ProyekPage = () => {
     },
     {
       title: "Tanggal",
-      key: "tanggal",
-      render: (text, record) => <p>{record.tanggal}</p>,
+      key: "tanggalMulai",
+      render: (text, record) => <p>{record.tanggalMulai}</p>,
     },
     {
       title: "Menu",
@@ -157,10 +160,66 @@ const ProyekPage = () => {
     ];
     return dayNames[date.getDay()];
   };
+  
+  function terbilang(angka) {
+    const bilangan = [
+      '', 'satu', 'dua', 'tiga', 'empat', 'lima', 'enam', 'tujuh', 'delapan', 'sembilan',
+      'sepuluh', 'sebelas', 'dua belas', 'tiga belas', 'empat belas', 'lima belas', 'enam belas', 'tujuh belas', 'delapan belas', 'sembilan belas'
+    ];
+    const tingkat = ['', 'ribu', 'juta', 'miliar'];
+
+    if (angka === 0) return 'nol rupiah';
+  
+    let kata = '';
+    let i = 0;
+  
+    // Memecah angka menjadi bagian ribuan dan mengubah tiap bagian menjadi kata
+    while (angka > 0) {
+      let bagian = angka % 1000;
+      if (bagian > 0) {
+        let bagianKata = '';
+        
+        if (bagian > 99) {
+          if (bagian < 200 ) {
+            bagianKata += 'seratus ';
+          } else {
+            bagianKata += bilangan[Math.floor(bagian / 100)] + ' ratus ';
+          }
+          bagian %= 100;
+        }
+        
+        if (bagian > 10 && bagian < 20) {
+          bagianKata += bilangan[bagian] + ' ';
+        } else {
+          if (bagian >= 20) {
+            bagianKata += bilangan[Math.floor(bagian / 10)] + ' puluh ';
+            bagian %= 10;
+          }
+          if (bagian > 0) {
+            bagianKata += bilangan[bagian] + ' ';
+          }
+        }
+        
+        // Menambahkan tingkat (ribu, juta, miliar)
+        if (tingkat[i] !== '') {
+          bagianKata += tingkat[i] + ' ';
+        }
+        
+        kata = bagianKata + kata;
+      }
+      angka = Math.floor(angka / 1000);
+      i++;
+    }
+  
+    // Menghapus spasi yang tidak perlu dan menambahkan 'rupiah'
+    return kata.trim() + ' rupiah';
+}
+
+
 
   const generatePDF = (record) => {
     const doc = new jsPDF();
-    const dayName = getDayName(record.tanggal);
+    const dayName = getDayName(record.tanggalMulai);
     // Add Watermark on Each Page
     const addWatermark = (doc) => {
       doc.saveGraphicsState();
@@ -198,7 +257,7 @@ const ProyekPage = () => {
 
     // Garis bawah untuk header
     doc.setDrawColor(50); // Warna garis (default: hitam)
-    doc.line(50, 22, 160, 22); // (x1, y1, x2, y2): Koordinat awal dan akhir garis
+    doc.line(55, 22, 157, 22); // (x1, y1, x2, y2): Koordinat awal dan akhir garis
 
     // Subheader
     doc.setFontSize(10);
@@ -209,7 +268,7 @@ const ProyekPage = () => {
     doc.setFontSize(10);
 
     doc.text(
-      `Pada hari, ${dayName} ${record.tanggal}, yang bertanda tangan di bawah ini:`,
+      `Pada hari, ${dayName} ${record.tanggalMulai}, yang bertanda tangan di bawah ini:`,
       15,
       40,
       { maxWidth: 170 }
@@ -220,8 +279,8 @@ const ProyekPage = () => {
       ["   Alamat", `: ${record.alamat || "[kosong]"}`],
       ["   NPWP", `: ${record.npwp || "[kosong]"}`],
     ];
-
-    // Table Data PIHAK KEDUA
+    
+    // Menambahkan kolom kosong pada tableData1 agar jumlah kolomnya sama dengan tableData2
     const tableData2 = [
       ["2. Nama", ": SULTON FATONI"],
       ["   NIK", ": 3510201106940002"],
@@ -232,7 +291,11 @@ const ProyekPage = () => {
       ["   NPWP", ": 636238206627000"],
       ["   Jabatan", ": Direktur"],
     ];
-
+    
+    // Menyusun lebar kolom secara eksplisit agar konsisten
+    const columnWidths = [50, 140]; // Menentukan lebar kolom (misalnya: kolom 1 = 50, kolom 2 = 140)
+    
+    // Tabel pertama
     doc.autoTable({
       body: tableData1,
       startY: 45,
@@ -240,12 +303,22 @@ const ProyekPage = () => {
         font: "Times",
         fontSize: 10,
         cellPadding: 1,
+        minCellHeight: 3, // Konsistenkan tinggi baris
       },
       theme: "plain",
+      columnStyles: {
+        0: { cellWidth: columnWidths[0] }, // Kolom pertama
+        1: { cellWidth: columnWidths[1] }, // Kolom kedua
+      },
     });
-
+    
+    // Menyimpan posisi akhir tabel pertama
     let yPos = doc.previousAutoTable.finalY + 5;
+    
+    // Menambahkan teks untuk PIHAK PERTAMA
     doc.text("Untuk selanjutnya disebut sebagai PIHAK PERTAMA.", 15, yPos);
+    
+    // Tabel kedua
     doc.autoTable({
       body: tableData2,
       startY: yPos + 5,
@@ -253,30 +326,38 @@ const ProyekPage = () => {
         font: "Times",
         fontSize: 10,
         cellPadding: 1,
+        minCellHeight: 3, // Konsistenkan tinggi baris
       },
       theme: "plain",
+      columnStyles: {
+        0: { cellWidth: columnWidths[0] }, // Kolom pertama
+        1: { cellWidth: columnWidths[1] }, // Kolom kedua
+      },
     });
-
+    
+    // Menyimpan posisi akhir tabel kedua
     yPos = doc.previousAutoTable.finalY + 5;
+    
+    // Menambahkan teks untuk PIHAK KEDUA
     doc.text("Untuk selanjutnya disebut sebagai PIHAK KEDUA.", 15, yPos);
+    
     yPos += 10;
     doc.text(
       `Bahwa sebelum ditanda tanganinya Surat Perjanjian ini, Para pihak terlebih dahulu menerangkan hal–hal sebagai berikut: \n\n` +
-        `1. Bahwa Pihak Pertama adalah selaku INVESTOR yang memiliki modal sebesar Rp.${record.modal.toLocaleString()},-  untuk selanjutnya disebut sebagai MODAL INVESTASI untuk project " ${
-          record.desc
-        } ". \n\n` +
-        `2. Bahwa Pihak Kedua adalah Pengelola Dana Investasi di bidang Importir dan perdagangan yang berlokasi di area banyuwangi yang menerima DANA INVESTASI dari Pihak Pertama. \n\n` +
-        `3. Dana Investasi dari pihak pertama yang kemudian di rubah oleh pihak kedua menjadi perhitungan SAHAM LEMBARAN, dimana setiap LEMBAR SAHAM ternilai Rp.${record.hargaLembar.toLocaleString()},- \n\n` +
+        `1. Bahwa Pihak Pertama adalah selaku INVESTOR yang memiliki modal sebesar Rp.${record.modal.toLocaleString()},- ( ${terbilang(record.modal)} ) untuk selanjutnya disebut sebagai MODAL INVESTASI untuk project CV. PEMUDA GROUP INDONESIA. \n\n` +
+        `2. Bahwa Pihak Kedua adalah Pengelola Dana Investasi di bidang Impor dan Penjualan Router dari china yang berlokasi di Dusun Parastembok, 01/03 Desa. Jambewangi, Kec Sempu, Banyuwangi
+yang menerima DANA INVESTASI dari Pihak Pertama. \n\n` +
+        `3. Dana Investasi dari pihak pertama yang kemudian di rubah oleh pihak kedua menjadi perhitungan SAHAM LEMBARAN, dimana setiap LEMBAR SAHAM ternilai Rp. 100,000,- ( Seratus ribu rupiah ) \n\n` +
         `4. Kepemilikan SAHAM Pihak Pertama dijelaskan sebagai berikut :\n` +
         `       a). MODAL INVESTASI	: Rp.${record.modal.toLocaleString()} \n` +
         `       b). LEMBAR SAHAM	    : ${record.saham} \n\n` +
-        `5. Bahwa Pihak Pertama dan Pihak Kedua setuju untuk saling mengikatkan diri dalam suatu perjanjian kerjasama Investasi dalam Peningkatan Modal Investasi di project " ${record.desc} " yang berlokasi di area banyuwangi, sesuai dengan ketentuan hukum yang berlaku.\n\n` +
+        `5. Bahwa Pihak Pertama dan Pihak Kedua setuju untuk saling mengikatkan diri dalam suatu perjanjian kerjasama Investasi dalam Peningkatan Modal Investasi di CV. PEMUDA GROUP INDONESIA yang berlokasi di Dusun Parastembok, 01/03 Desa. Jambewangi, Kec Sempu, Banyuwangi, sesuai dengan ketentuan hukum yang berlaku.\n\n` +
         `6. Bahwa berdasarkan hal-hal diatas, kedua belah pihak menyatakan sepakat dan setuju untuk mengadakan Perjanjian Kerjasama ini yang dilaksanakan dengan ketentuan dan syarat-syarat sebagai berikut :\n\n`,
       15,
       yPos,
       { maxWidth: 170 }
     );
-    yPos += 100;
+    yPos += 110;
     doc.text(`PASAL I`, 105, yPos, null, null, "center");
     yPos += 5;
     doc.setFont("helvetica", "bold");
@@ -284,7 +365,7 @@ const ProyekPage = () => {
     doc.setFont("helvetica", "normal");
     yPos += 10;
     doc.text(
-      `Pihak Pertama dalam perjanjian ini memberi DANA INVESTASI kepada Pihak Kedua sebesar Rp. ${record.modal.toLocaleString()},- dan Pihak Kedua dengan ini telah menerima penyerahan DANA INVESTASI tersebut dari Pihak Pertama serta menyanggupi untuk melaksanakan pengelolaan DANA INVESTASI tersebut.`,
+      `Pihak Pertama dalam perjanjian ini memberi DANA INVESTASI kepada Pihak Kedua sebesar Rp. ${record.modal.toLocaleString()},- ( ${terbilang(record.modal)} ) dan Pihak Kedua dengan ini telah menerima penyerahan DANA INVESTASI tersebut dari Pihak Pertama serta menyanggupi untuk melaksanakan pengelolaan DANA INVESTASI tersebut.`,
       15,
       yPos,
       { maxWidth: 170 }
@@ -298,9 +379,9 @@ const ProyekPage = () => {
     doc.text(`RUANG LINGKUP`, 105, 25, null, null, "center");
     doc.setFont("helvetica", "normal");
     doc.text(
-      `1. Dalam pelaksanaan perjanjian ini, Pihak Pertama memberi DANA INVESTASI kepada Pihak Kedua sebesar Rp. ………………………,- (terbilan) dan Pihak Kedua dengan ini telah menerima penyerahan DANA INVESTASI tersebut dari Pihak Pertama serta menyanggupi untuk  melaksanakan pengelolaan DANA INVESTASI. \n\n` +
-        `2. Pihak Kedua dengan ini berjanji dan mengikatkan diri untuk melaksanakan perputaran DANA INVESTASI pada Usaha Peningkatan Modal Investasi di bidang ……………………. yang berlokasi di…………………………………………… setelah ditanda tanganinya perjanjian ini. \n\n` +
-        `3. Pihak Kedua dengan ini berjanji dan mengikatkan diri untuk memberikan keuntungan berdasarkan persentase dari hasil dan resiko setelah pengurangan modal operasional yang terhitung dalam lembaran saham yang berlaku adalah 10% (sepuluh persen) untuk pihak keduan dan 90% untuk pihak pertama dalam jangka waktu 6 bulan atau musiman.`,
+      `1. Dalam pelaksanaan perjanjian ini, Pihak Pertama memberi DANA INVESTASI kepada Pihak Kedua sebesar Rp. ${record.modal.toLocaleString()},- ( ${terbilang(record.modal)} ) dan Pihak Kedua dengan ini telah menerima penyerahan DANA INVESTASI tersebut dari Pihak Pertama serta menyanggupi untuk melaksanakan pengelolaan DANA INVESTASI. \n\n` +
+        `2. Pihak Kedua dengan ini berjanji dan mengikatkan diri untuk melaksanakan perputaran DANA INVESTASI pada Usaha Peningkatan Modal Investasi di bidang Impor dan Penjualan Router yang berlokasi di Dusun Parastembok, 01/03 Desa. Jambewangi, Kec Sempu, Banyuwangi, setelah ditanda tanganinya perjanjian ini. \n\n` +
+        `3. Pihak Kedua dengan ini berjanji dan mengikatkan diri untuk memberikan keuntungan berdasarkan persentase dari hasil dan resiko setelah pengurangan modal, operasional, pajak dan kewajiban-kewajiban lainya yang terhitung dalam lembaran saham yang berlaku adalah sebesar 10% (sepuluh persen) untuk pihak kedua dan 90% untuk pihak pertama dalam jangka waktu 6 bulan atau musiman.`,
       15,
       35,
       { maxWidth: 170 }
@@ -310,7 +391,7 @@ const ProyekPage = () => {
     doc.text(`JANGKA WAKTU KERJASAMA`, 105, 100, null, null, "center");
     doc.setFont("helvetica", "normal");
     doc.text(
-      `1. Perjanjian kerjasama ini dilakukan dan diterima untuk jangka waktu 6 bulan (enam) bulan atau 1 musim, terhitung sejak tanggal ………………………. dengan periode jatuh tempo yang disepakati, kesepakatan   bersama antara pihak pertama dan pihak kedua sebagaimana 100% laba diberikan kepada pihak pertama dan kedua setelah perhitungan laba bersih di kurangi operasional dan  PASAL V ayat 3. dan di serahkan pada tanggal ………………….. secara utuh tanpa potongan serta dapat diperpanjang atau di perbarui dengan persetujuan kedua belah pihak untuk jangka waktu selanjutnya. \n\n` +
+      `1. Perjanjian kerjasama ini dilakukan dan diterima untuk jangka waktu 6 bulan (enam) bulan atau 1 musim, terhitung sejak tanggal ${record.tanggalMulai} dengan periode jatuh tempo yang disepakati, kesepakatan   bersama antara pihak pertama dan pihak kedua sebagaimana 100% laba diberikan kepada pihak pertama dan kedua setelah perhitungan laba bersih di kurangi operasional dan  PASAL V ayat 3. dan di serahkan pada tanggal ${record.tanggalAkhir} secara utuh tanpa potongan serta dapat diperpanjang atau di perbarui dengan persetujuan kedua belah pihak untuk jangka waktu selanjutnya. \n\n` +
         `2. Jangka waktu perjanjian berakhir pada tanggal jatuh tempo yang sudah disepakati bersama antara pihak pertama dan pihak kedua dan tidak bisa di tarik atau dicairkan di tengah perjalanan suatu periode atau sewaktu-waktu dengan keinginan sepihak oleh pihak pertama. \n\n` +
         `3. Perjanjian kerjasama mengikat setiap periode atau musim yang telah ditentukan pihak ke dua yaitu 6 bulan atau 1 musim, setelah periode yang di tentukan masuk dalam jatuh tempo maka laba yang disebut DEVIDEN lembaran saham diberikan dan kemudian modal bisa di tarik atau tetap di digunakan sebagai perjalanan bisnis selanjutnya dengan cara melakukan pembaruan perjanjian kerjasama investasi.`,
       15,
@@ -323,14 +404,84 @@ const ProyekPage = () => {
     doc.setFont("helvetica", "normal");
     doc.text(
       `Dalam Perjanjian Kerjasama ini, Pihak Pertama memiliki Hak dan Kewajiban sebagai berikut : \n\n` +
-        `1. Pihak pertama memberikan DANA INVESTASI kepada Pihak Kedua sebesar Rp. ………………………..,- (terbilang). \n\n` +
+        `1. Pihak pertama memberikan DANA INVESTASI kepada Pihak Kedua sebesar Rp. ${record.modal.toLocaleString()},- ( ${terbilang(record.modal)} ) \n\n` +
         `2. Pihak pertama berhak meminta kembali DANA INVESTASI yang telah diserahkan kepada Pihak Kedua dengan ketentuan berdasarkan Pasal III Ayat 2. \n\n` +
-        `3.  Pihak pertama menerima hasil keuntungan atas pengelolaan DANA INVESTASI, sesuai dengan Pasal VI dalam perjanjian ini.`,
+        `3. Pihak pertama menerima hasil keuntungan atas pengelolaan DANA INVESTASI, sesuai dengan Pasal VI dalam perjanjian ini. \n\n` +
+        `4. Investor atau pihak pertama membayar fee sebesar 2% (dua persen) dari keuntungan pengelolaan Dana Investasi di setiap periode sebelum dibagikan DEVIDEN atau keuntungan kepada pihak kedua.`,
       15,
       195,
       { maxWidth: 170 }
     );
 
+    doc.addPage();
+    addWatermark(doc);
+    doc.text(`PASAL VI`, 105, 20, null, null, "center");
+    doc.setFont("helvetica", "bold");
+    doc.text(`PEMBAGIAN HASIL`, 105, 25, null, null, "center");
+    doc.setFont("helvetica", "normal");
+    doc.text(
+      `Dalam Perjanjian Kerjasama Investasi Modal ini, kedua belah pihak sepakat didalam hal pembagian hasil investasi penyertaan dana sebagai berikut : \n\n` +
+        `1. Kedua belah pihak sepakat dan setuju bahwa perjanjian kerjasama ini dilakukan dengan cara pemberian keuntungan yang diperoleh dalam Usaha Peningkatan Modal Investasi Di CV PEMUDA GROUP INDONESIA yang berlokasi di Dusun Parastembok, 01/03 Desa. Jambewangi, Kec Sempu, Banyuwangi, sebagaimana Pasal II ayat 3 perjanjian ini. \n\n` +
+        `2. Bagi hasil yang dimaksud dalam ayat 1 diatas dilakukan dengan memperhitungkan biaya investasi sebagaimana tersebut dalam pasal II ayat 1. \n\n` +
+        `3. Bagi hasil yang dimaksud dalam ayat 2 di atas berlaku sampai dengan Pihak Pertama menarik kembali DANA INVESTASI yang telah diserahkan sesuai dengan perhitungan Pasal II ayat 3 perjanjian ini. \n\n`,
+      15,
+      35,
+      { maxWidth: 170 }
+    );
+    doc.text(`PASAL VII`, 105, 100, null, null, "center");
+    doc.setFont("helvetica", "bold");
+    doc.text(`KEADAAN MEMAKSA (FORCE MAJEUR)`, 105, 105, null, null, "center");
+    doc.setFont("helvetica", "normal");
+    doc.text(
+        `1. Yang termasuk dalam Force Majeur adalah akibat dari kejadian-kejadian diluar kuasa dan kehendak dari kedua belah pihak diantaranya termasuk tidak terbatas bencana alam, banjir, badai, topan, gempa bumi, kebakaran, perang, huru-hara, pemberontakan, demonstrasi, pemogokan, kegagalan investasi. \n\n` +
+        `2. Jika dalam pelaksanaan perjanjian ini terhambat ataupun tertunda baik secara keseluruhan ataupun sebagian yang dikarenakan hal-hal tersebut dalam ayat 1 diatas, maka Pihak pertama dan Pihak kedua bersedia mengganti, menanggung sejumlah Dana secara penuh sesuai Pasal 2 ayat 3 apabila belum ada pembagian hasil keuntungan, atau pengembalian Dana Investasi dikurangi dengan kerusakan terjadinya pasal 7 ayat 1. \n\n` +
+        `3. Pengembalian Dana Investasi sebagaimana tersebut dalam ayat 2, mengenai tata cara pengembaliannya akan diadakan musyawarah terlebih dahulu antara Pihak Pertama dan Pihak Kedua mengenai proses atau jangka waktu pengembaliannya. \n\n`,
+      15,
+      115,
+      { maxWidth: 170 }
+    );
+    doc.text(`PASAL VIII`, 105, 180, null, null, "center");
+    doc.setFont("helvetica", "bold");
+    doc.text(`WANPRESTASI`, 105, 185, null, null, "center");
+    doc.setFont("helvetica", "normal");
+    doc.text(
+        `1. Dalam hal salah satu pihak telah melanggar kewajibannya yang tercantum dalam salah satu Pasal perjanjian ini, telah cukup bukti dan tanpa perlu dibuktikan lebih lanjut, bahwa pihak yang melanggar tersebut telah melakukan tindakan Wanprestasi. \n\n` +
+        `2. Pihak yang merasa dirugikan atas tindakan Wanprestasi tersebut dalam ayat 1 diatas, berhak meminta ganti kerugian dari pihak yang melakukan wanprestasi tersebut atas sejumlah kerugian yang dideritanya, kecuali dalam hal kerugian tersebut disebabkan karena adanya suatu keadaan memaksa, seperti tercantum dalam Pasal VII. \n\n`,
+      15,
+      195,
+      { maxWidth: 170 }
+    );
+    doc.text(`PASAL IX`, 105, 235, null, null, "center");
+    doc.setFont("helvetica", "bold");
+    doc.text(`PERSELISIHAN`, 105, 240, null, null, "center");
+    doc.setFont("helvetica", "normal");
+    doc.text(
+        `Bilamana dalam pelaksanaan perjanjian Kerjasama ini terdapat perselisihan antara kedua belah pihak baik dalam pelaksanaannya ataupun dalam penafsiran salah satu Pasal dalam perjanjian ini, maka kedua belah pihak sepakat untuk sebisa mungkin menyelesaikan perselisihan tersebut dengan cara musyawarah. Apabila musyawarah telah dilakukan oleh kedua belah pihak, namun ternyata tidak  berhasil  mencapai suatu kemufakatan maka Para Pihak sepakat bahwa semua sengketa yang timbul  dari  perjanjian ini akan diselesaikan pada Kantor Kepaniteraan Pengadilan Negeri. \n\n`,
+      15,
+      250,
+      { maxWidth: 170 }
+    );
+
+    doc.addPage();
+    addWatermark(doc);
+    doc.text(`PASAL X`, 105, 20, null, null, "center");
+    doc.setFont("helvetica", "bold");
+    doc.text(`ATURAN PENUTUP`, 105, 25, null, null, "center");
+    doc.setFont("helvetica", "normal");
+    doc.text(
+      `Hal-hal yang belum diatur atau belum cukup diatur dalam perjanjian ini apabila dikemudian hari dibutuhkan dan dipandang perlu akan ditetapkan tersendiri secara musyawarah dan selanjutnya akan ditetapkan dalam suatu ADDENDUM yang berlaku mengikat bagi kedua belah pihak, yang akan direkatkan dan merupakan bagian yang tidak terpisahkan dari Perjanjian ini.
+
+Demikianlah surat perjanjian kerjasama ini dibuat dalam rangkap 2 (dua), untuk masing-masing pihak, yang telah ditandatangani bermaterai, yang masing-masing mempunyai kekuatan hukum yang sama dan berlaku sejak ditandatangani. `,
+      15,
+      35,
+      { maxWidth: 170 }
+    );
+    doc.text(`Sempu, ${record.tanggalMulai}`, 170, 85, null, null, "right");
+    doc.setFont("helvetica", "bold");
+    doc.text(`Pihak Kedua`, 170, 110, null, null, "right");
+    doc.text(`Pihak Pertama`, 40, 110, null, null, "left");
+    doc.text(`SULTON FATONI`, 170, 140, null, null, "right");
+    doc.text(`${record.investor}`, 40, 140, null, null, "left");
     // Open the PDF in a new browser tab
     const pdfBlob = doc.output("blob");
     const pdfUrl = URL.createObjectURL(pdfBlob);
