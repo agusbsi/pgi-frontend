@@ -28,6 +28,7 @@ const ReturPage = lazy(() => import("./pages/mypanel/ReturPage"));
 const GaransiPage = lazy(() => import("./pages/mypanel/GaransiPage"));
 const DashboardInvestor = lazy(() => import("./pages/investor/Dashboard"));
 const AccountPage = lazy(() => import("./pages/mypanel/AccountPage"));
+const LaporanJual = lazy(() => import("./pages/investor/LaporanJual"));
 const DetailProyekInvestor = lazy(() =>
   import("./pages/investor/ProyekDetail")
 );
@@ -241,6 +242,14 @@ const App = () => {
             element={
               <MainLayout>
                 <AccountPage />
+              </MainLayout>
+            }
+          />
+          <Route
+            path="/laporan-jual"
+            element={
+              <MainLayout>
+                <LaporanJual />
               </MainLayout>
             }
           />

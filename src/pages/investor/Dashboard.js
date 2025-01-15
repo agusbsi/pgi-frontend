@@ -1,16 +1,52 @@
 import React from "react";
-import { Card, Typography, Row, Col, Button, Avatar, Divider } from "antd";
+import {
+  Card,
+  Typography,
+  Row,
+  Col,
+  Button,
+  Avatar,
+  Divider,
+  List,
+} from "antd";
 import {
   BellOutlined,
   HomeOutlined,
   DollarOutlined,
   HistoryOutlined,
+  RightOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 
 const { Title, Text } = Typography;
 
 const DashboardInvestor = () => {
+  const transaksiData = [
+    {
+      tanggal: "13 Jan 2025",
+      nama: "PJ-9161956",
+      nominal: "IDR 38,000.00",
+      metode: "Cash",
+    },
+    {
+      tanggal: "11 Jan 2025",
+      nama: "PJ-1952791",
+      nominal: "IDR 30,000.00",
+      metode: "Transfer BCA",
+    },
+    {
+      tanggal: "11 Jan 2025",
+      nama: "PJ-129561956",
+      nominal: "IDR 17,000.00",
+      metode: "Cash",
+    },
+    {
+      tanggal: "11 Jan 2025",
+      nama: "PJ-109751075",
+      nominal: "IDR 44,000.00",
+      metode: "Piutang",
+    },
+  ];
   return (
     <div style={{ padding: "16px", background: "#f5f5f5", minHeight: "100vh" }}>
       {/* Header */}
@@ -247,42 +283,44 @@ const DashboardInvestor = () => {
       </Card>
       <Card
         title="5 Transaksi terbaru"
-        extra={<a href="#">Lebih lengkap</a>}
+        extra={<Link to={`/laporan-jual`}>Lebih lengkap</Link>}
         style={{ borderRadius: "12px" }}
         className="mb-3"
       >
-        <Row
-          justify="space-between"
-          align="middle"
-          className="bg-blue-50 p-2 rounded-md mb-1"
-        >
-          <div>
-            <Text className="font-bold">PJ-84168164</Text>
-            <br />
-            <Text type="secondary">Proyek : 146194691</Text>
-          </div>
-          <div>
-          <Text className="font-bold">100 Pcs</Text>
-            <br />
-            <Text type="secondary">01 Jan 2025</Text>
-          </div>
-        </Row>
-        <Row
-          justify="space-between"
-          align="middle"
-          className="bg-blue-50 p-2 rounded-md mb-1"
-        >
-          <div>
-            <Text className="font-bold">PJ-84168164</Text>
-            <br />
-            <Text type="secondary">Proyek : 146194691</Text>
-          </div>
-          <div>
-          <Text className="font-bold">100 Pcs</Text>
-            <br />
-            <Text type="secondary"> 02 Jan 2025</Text>
-          </div>
-        </Row>
+        <List
+          dataSource={transaksiData}
+          renderItem={(item) => (
+            <>
+              <div className="flex justify-between items-center cursor-pointer hover:bg-blue-50 p-1 rounded-lg">
+                {/* Bagian Tanggal */}
+                <div className="text-center">
+                  <div className="font-extrabold text-lg text-neutral-500">
+                    {item.tanggal.split(" ")[0]}
+                  </div>
+                  <div className="text-neutral-500">
+                    {item.tanggal.split(" ")[1]}
+                  </div>
+                  <div className="text-neutral-500">
+                    {item.tanggal.split(" ")[2]}
+                  </div>
+                </div>
+
+                {/* Bagian Detail Transaksi */}
+                <div style={{ flex: 1, marginLeft: "25px" }}>
+                  <h4 className="font-bold text-blue-600">{item.nama}</h4>
+                  <span className="font-semibold">{item.nominal}</span>
+                  <p style={{ margin: "0", fontSize: "12px", color: "#888" }}>
+                    {item.metode}
+                  </p>
+                </div>
+
+                {/* Ikon Panah */}
+                <RightOutlined style={{ color: "#888", fontSize: "16px" }} />
+              </div>
+              <Divider />
+            </>
+          )}
+        />
       </Card>
 
       {/* Footer Navigation */}
